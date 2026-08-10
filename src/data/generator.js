@@ -5,6 +5,7 @@
    ========================================================================== */
 import { getLang } from '../services/i18n.js';
 import { fmtId } from '../utils/format.js';
+import { levelLabel } from './types.js';
 
 // ---------- Prompt parsing ----------
 function parsePrompt(prompt) {
@@ -42,9 +43,9 @@ function extractTopic(prompt) {
 }
 
 // ---------- Lesson Plan ----------
-function buildLesson(prompt, parsed) {
+function buildLesson(prompt, parsed, opts = {}) {
   const topic = extractTopic(prompt);
-  const subject = guessSubject(prompt);
+  const subject = opts.subject || guessSubject(prompt);
   return {
     type: 'lesson',
     title: 'Lesson Plan: ' + topic,
@@ -79,13 +80,13 @@ function buildLesson(prompt, parsed) {
 }
 
 // ---------- Worksheet ----------
-function buildWorksheet(prompt, parsed) {
+function buildWorksheet(prompt, parsed, opts = {}) {
   const topic = extractTopic(prompt);
   return {
     type: 'worksheet',
     title: 'Worksheet: ' + topic,
     grade: parsed.grade,
-    subject: guessSubject(prompt),
+    subject: opts.subject || guessSubject(prompt),
     category: 'Worksheet',
     instructions: 'Read each part carefully. Answer in complete sentences where directed. Work neatly and ask your teacher if you get stuck.',
     sections: [
@@ -125,7 +126,7 @@ function normalizeKinds(prefs, n) {
   return list;
 }
 
-function buildQuiz(prompt, parsed, prefs) {
+function buildQuiz(prompt, parsed, opts = {}, prefs) {
   const topic = extractTopic(prompt);
   const count = parsed.count;
   const seeds = hash(prompt);
@@ -172,7 +173,7 @@ function buildQuiz(prompt, parsed, prefs) {
     type: 'quiz',
     title: 'Quiz: ' + topic + ' (' + count + ' questions)',
     grade: parsed.grade,
-    subject: guessSubject(prompt),
+    subject: opts.subject || guessSubject(prompt),
     category: 'Quiz',
     count: count,
     questions: questions,
@@ -185,20 +186,20 @@ function seedIsTrue(prompt, i) {
 }
 
 // ---------- Slides ----------
-function buildSlides(prompt, parsed) {
+function buildSlides(prompt, parsed, opts = {}) {
   const topic = extractTopic(prompt);
   return {
     type: 'slides',
     title: 'Slides: ' + topic,
     grade: parsed.grade,
-    subject: guessSubject(prompt),
+    subject: opts.subject || guessSubject(prompt),
     category: 'Slides',
     outline: [
       'Title slide', 'Warm-up question', 'Learning goals',
       'Key idea 1', 'Key idea 2', 'Example', 'Guided practice', 'Summary & exit ticket'
     ],
     slides: [
-      { title: topic, subtitle: parsed.grade + ' · ' + guessSubject(prompt), bullets: [] },
+      { title: topic, subtitle: parsed.grade + ' · ' + (opts.subject || guessSubject(prompt)), bullets: [] },
       { title: 'Warm-up question', bullets: ['What do you already know about ' + topic + '?', 'Turn and talk with a partner for 2 minutes.'] },
       { title: 'Learning goals', bullets: [
         'I can explain the main ideas of ' + topic,
@@ -216,7 +217,7 @@ function buildSlides(prompt, parsed) {
 }
 
 // ---------- Rubric ----------
-function buildRubric(prompt, parsed) {
+function buildRubric(prompt, parsed, opts = {}) {
   const topic = extractTopic(prompt);
   const criteria = [
     { name: 'Understanding', rows: ['Deep understanding shown with examples', 'Solid understanding of key ideas', 'Partial understanding', 'Little understanding shown'] },
@@ -228,7 +229,7 @@ function buildRubric(prompt, parsed) {
     type: 'rubric',
     title: 'Rubric: ' + topic,
     grade: parsed.grade,
-    subject: guessSubject(prompt),
+    subject: opts.subject || guessSubject(prompt),
     category: 'Rubric',
     scale: ['Exceeds (4)', 'Meets (3)', 'Developing (2)', 'Beginning (1)'],
     criteria: criteria,
@@ -237,13 +238,13 @@ function buildRubric(prompt, parsed) {
 }
 
 // ---------- Classroom Activity ----------
-function buildActivity(prompt, parsed) {
+function buildActivity(prompt, parsed, opts = {}) {
   const topic = extractTopic(prompt);
   return {
     type: 'activity',
     title: 'Activity: ' + topic,
     grade: parsed.grade,
-    subject: guessSubject(prompt),
+    subject: opts.subject || guessSubject(prompt),
     category: 'Activity',
     summary: 'A hands-on, student-centred activity to explore ' + topic + '.',
     objective: 'Students will be able to demonstrate and explain the key ideas of ' + topic + ' through guided hands-on work.',
@@ -288,19 +289,22 @@ function guessSubject(prompt) {
 }
 
 // ---------- Public API ----------
-export function generateItems(prompt, types, quizOpts) {
+export function generateItems(prompt, types, quizOpts, opts) {
+  const lang = getLang();
   const parsed = parsePrompt(prompt);
+  if (opts && opts.level) parsed.grade = levelLabel(opts.level, lang);
   if (quizOpts && quizOpts.count) parsed.count = Number(quizOpts.count) || parsed.count;
   const prefs = (quizOpts && quizOpts.kinds && quizOpts.kinds.length) ? quizOpts.kinds : ['mc', 'tf', 'sa'];
+  const subject = (opts && opts.subject) ? opts.subject : null;
   const items = [];
   (types && types.length ? types : ['lesson']).forEach(t => {
     let item;
-    if (t === 'lesson') item = buildLesson(prompt, parsed);
-    else if (t === 'worksheet') item = buildWorksheet(prompt, parsed);
-    else if (t === 'quiz') item = buildQuiz(prompt, parsed, prefs);
-    else if (t === 'slides') item = buildSlides(prompt, parsed);
-    else if (t === 'rubric') item = buildRubric(prompt, parsed);
-    else if (t === 'activity') item = buildActivity(prompt, parsed);
+    if (t === 'lesson') item = buildLesson(prompt, parsed, { subject });
+    else if (t === 'worksheet') item = buildWorksheet(prompt, parsed, { subject });
+    else if (t === 'quiz') item = buildQuiz(prompt, parsed, { subject }, prefs);
+    else if (t === 'slides') item = buildSlides(prompt, parsed, { subject });
+    else if (t === 'rubric') item = buildRubric(prompt, parsed, { subject });
+    else if (t === 'activity') item = buildActivity(prompt, parsed, { subject });
     if (item) {
       item.id = fmtId();
       items.push(item);

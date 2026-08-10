@@ -16,9 +16,9 @@ export const API = {
    * Generate materials from a teaching prompt.
    * @returns {Promise<Array>} resolved with generated item objects
    */
-  async generate({ prompt, types, quizOpts }) {
+  async generate({ prompt, types, quizOpts, level, subject }) {
     await wait(randomLatency());
-    const items = generateItems(prompt, types, quizOpts);
+    const items = generateItems(prompt, types, quizOpts, { level, subject });
     STORE.recordGeneration(items.length);
     return items;
   },

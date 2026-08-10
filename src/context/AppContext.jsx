@@ -6,6 +6,7 @@ const Ctx = createContext(null);
 export function AppProvider({ children }) {
   const [user, setUser] = useState(() => STORE.getUser());
   const [libQuery, setLibQuery] = useState(undefined);
+  const [pendingPrompt, setPendingPrompt] = useState(null);
 
   const login = useCallback((name, subject) => {
     const u = { name, subject, initial: name.charAt(0).toUpperCase() };
@@ -19,7 +20,7 @@ export function AppProvider({ children }) {
   }, []);
 
   return (
-    <Ctx.Provider value={{ user, login, logout, libQuery, setLibQuery }}>
+    <Ctx.Provider value={{ user, login, logout, libQuery, setLibQuery, pendingPrompt, setPendingPrompt }}>
       {children}
     </Ctx.Provider>
   );

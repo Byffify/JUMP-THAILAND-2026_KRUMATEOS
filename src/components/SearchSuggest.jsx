@@ -1,29 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { STORE } from '../services/store.js';
-import { escapeAttr, sanitize } from '../utils/format.js';
 import { useI18n } from '../context/I18nContext.jsx';
 
-export default function SearchSuggest({ onSearch }) {
+export default function SearchSuggest({ value, inputRef, open, onOpenChange, onSearch }) {
   const { t } = useI18n();
-  const [open, setOpen] = useState(false);
-  const [input, setInput] = useState('');
   const panelRef = useRef(null);
-  const inputRef = useRef(null);
-
-  const reRender = useCallback((term) => setInput(term), []);
+  const [, setVer] = useState(0);
+  const refresh = useCallback(() => setVer(v => v + 1), []);
 
   useEffect(() => {
     if (!open) return;
     const onDoc = e => {
       if (!panelRef.current || panelRef.current.contains(e.target)) return;
       if (e.target === inputRef.current) return;
-      setOpen(false);
+      onOpenChange(false);
     };
     document.addEventListener('click', onDoc);
     return () => document.removeEventListener('click', onDoc);
-  }, [open]);
+  }, [open, onOpenChange, inputRef]);
 
-  const q = input.trim().toLowerCase();
+  const q = (value || '').trim().toLowerCase();
   const all = STORE.searchHistory(10);
   const matches = q ? all.filter(e => (e.term || '').toLowerCase().includes(q)) : all;
   const popular = matches.slice().sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 8);
@@ -41,14 +37,18 @@ export default function SearchSuggest({ onSearch }) {
           <div className="dash-suggest-section">
             <div className="dash-suggest-head">
               <span className="dash-suggest-title">{t('dash.historyTitle')}</span>
-              <button type="button" className="dash-suggest-clear" id="dash-suggest-clear-all"
-                      onClick={() => { STORE.clearSearchHistory(); reRender(input); }}>
+              <button
+                type="button"
+                className="dash-suggest-clear"
+                id="dash-suggest-clear-all"
+                onClick={() => { STORE.clearSearchHistory(); refresh(); }}
+              >
                 {t('dash.clearAll')}
               </button>
             </div>
             <div className="dash-suggest-rows" onClick={e => {
               const del = e.target.closest('[data-del]');
-              if (del) { STORE.removeSearch(del.dataset.del); reRender(input); return; }
+              if (del) { STORE.removeSearch(del.dataset.del); refresh(); return; }
               const term = e.target.closest('[data-term]');
               if (term) onSearch(term.dataset.term);
             }}>
@@ -84,9 +84,11 @@ export default function SearchSuggest({ onSearch }) {
   }
 
   return (
-    <div ref={panelRef}
-         id="dash-search-suggest"
-         className={open ? 'absolute left-0 right-0 top-full mt-2' : 'hidden absolute left-0 right-0 top-full mt-2'}>
+    <div
+      ref={panelRef}
+      id="dash-search-suggest"
+      className={(open ? '' : 'hidden ') + 'absolute left-0 right-0 top-full mt-2'}
+    >
       {open && body}
     </div>
   );

@@ -7,6 +7,7 @@ import { AppProvider, useApp } from './context/AppContext.jsx';
 import AppLayout from './layouts/AppLayout.jsx';
 import AuthView from './layouts/AuthView.jsx';
 import Placeholder from './pages/Placeholder.jsx';
+import DashboardPage from './pages/DashboardPage.jsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -23,7 +24,7 @@ function Shell() {
         <Routes>
           <Route element={<AppLayout />}>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<Placeholder />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/generator" element={<Placeholder />} />
             <Route path="/generator/:type" element={<Placeholder />} />
             <Route path="/content/:id" element={<Placeholder />} />

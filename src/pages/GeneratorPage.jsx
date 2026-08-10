@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { TYPE_ORDER } from '../data/types.js';
+import { TYPE_ORDER, LEVELS, SUBJECTS, levelLabel } from '../data/types.js';
 import { API } from '../services/api.js';
 import { Live } from '../services/store.js';
 import { useI18n } from '../context/I18nContext.jsx';
@@ -16,16 +16,15 @@ const QUIZ_KINDS = [
 ];
 
 export default function GeneratorPage() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const toast = useToast();
   const navigate = useNavigate();
   const { type: routeType } = useParams();
   const {
-    selectedTypes, setSelectedTypes, toggleType,
+    user,
     quizKinds, setQuizKinds,
     quizCount, setQuizCount,
     pendingPrompt, setPendingPrompt,
-    pendingAllTypes, setPendingAllTypes,
   } = useApp();
   const genRef = useEntranceAnimation();
 
@@ -33,14 +32,13 @@ export default function GeneratorPage() {
   const [generating, setGenerating] = useState(false);
   const promptRef = useRef(null);
 
-  useEffect(() => {
-    if (routeType && TYPE_ORDER.includes(routeType)) {
-      setSelectedTypes(new Set([routeType]));
-    } else if (pendingAllTypes) {
-      setSelectedTypes(new Set(TYPE_ORDER));
-    }
-    if (pendingAllTypes) setPendingAllTypes(false);
-  }, [routeType, pendingAllTypes, setSelectedTypes, setPendingAllTypes]);
+  const [selectedType, setSelectedType] = useState(() =>
+    routeType && TYPE_ORDER.includes(routeType) ? routeType : 'lesson'
+  );
+  const [level, setLevel] = useState('p4');
+  const [subject, setSubject] = useState(() =>
+    user && SUBJECTS.some(s => s.value === user.subject) ? user.subject : 'Science'
+  );
 
   useEffect(() => {
     if (pendingPrompt) {
@@ -55,9 +53,7 @@ export default function GeneratorPage() {
     );
   }, [setQuizKinds]);
 
-  const summary = selectedTypes.size
-    ? t('gen.summary', { n: selectedTypes.size })
-    : t('gen.summaryEmpty');
+  const summary = t('gen.summary');
 
   const ctaLabel = '✨ ' + t('gen.cta').replace(/✨\s?/, '');
 
@@ -69,11 +65,7 @@ export default function GeneratorPage() {
       if (promptRef.current) promptRef.current.focus();
       return;
     }
-    if (!selectedTypes.size) {
-      toast(t('gen.error.none'), 'error');
-      return;
-    }
-    const types = TYPE_ORDER.filter(x => selectedTypes.has(x));
+    const types = [selectedType];
     if (types.includes('quiz') && !quizKinds.length) {
       toast(t('gen.error.quizKinds'), 'error');
       return;
@@ -84,17 +76,16 @@ export default function GeneratorPage() {
 
     try {
       const quizOpts = { count: Number(quizCount), kinds: quizKinds };
-      const items = await API.generate({ prompt: value, types, quizOpts });
-      const first = items[0];
-      items.forEach(it => Live.put(it));
-      if (items.length > 1) first._bundle = items.map(i => i.id);
-      navigate('/content/' + first.id);
+      const items = await API.generate({ prompt: value, types, quizOpts, level, subject });
+      const item = items[0];
+      Live.put(item);
+      navigate('/content/' + item.id);
     } catch (err) {
       toast(t('gen.error.failed'), 'error');
     } finally {
       setGenerating(false);
     }
-  }, [generating, prompt, selectedTypes, quizKinds, quizCount, t, toast, navigate]);
+  }, [generating, prompt, selectedType, level, subject, quizKinds, quizCount, t, toast, navigate]);
 
   return (
     <section id="page-generator" className="page">
@@ -117,6 +108,25 @@ export default function GeneratorPage() {
         <div id="gen-error" className="hidden text-sm text-red-600 mb-3"></div>
       </div>
 
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center mb-4">
+        <div className="flex flex-col gap-1">
+          <label htmlFor="gen-level" className="text-sm font-medium text-muted">{t('gen.levelLabel')}</label>
+          <select id="gen-level" className="input sm:w-48" value={level} onChange={e => setLevel(e.target.value)}>
+            {LEVELS.map(lv => (
+              <option key={lv.value} value={lv.value}>{levelLabel(lv.value, lang)}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="gen-subject" className="text-sm font-medium text-muted">{t('gen.subjectLabel')}</label>
+          <select id="gen-subject" className="input sm:w-48" value={subject} onChange={e => setSubject(e.target.value)}>
+            {SUBJECTS.map(s => (
+              <option key={s.value} value={s.value}>{t(s.key)}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <h2 className="text-lg font-semibold mb-3">{t('gen.typesTitle')}</h2>
       <div
         id="gen-types"
@@ -130,19 +140,19 @@ export default function GeneratorPage() {
             key={type}
             type={type}
             index={i}
-            selected={selectedTypes.has(type)}
-            onClick={() => toggleType(type)}
+            selected={selectedType === type}
+            onClick={() => setSelectedType(type)}
             dataType={type}
             tabIndex={0}
             role="tab"
-            ariaSelected={selectedTypes.has(type)}
+            ariaSelected={selectedType === type}
           />
         ))}
       </div>
 
       <div
         id="quiz-options"
-        className={'rounded-2xl bg-white border border-line shadow-card p-5 mb-6' + (selectedTypes.has('quiz') ? '' : ' hidden')}
+        className={'rounded-2xl bg-white border border-line shadow-card p-5 mb-6' + (selectedType === 'quiz' ? '' : ' hidden')}
       >
         <p className="font-medium mb-3">{t('gen.quizTitle')}</p>
         <div className="flex flex-wrap items-center gap-6">

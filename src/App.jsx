@@ -9,6 +9,7 @@ import AuthView from './layouts/AuthView.jsx';
 import Placeholder from './pages/Placeholder.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 import GeneratorPage from './pages/GeneratorPage.jsx';
+import ContentViewPage from './pages/ContentViewPage.jsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -28,7 +29,7 @@ function Shell() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/generator" element={<GeneratorPage />} />
             <Route path="/generator/:type" element={<GeneratorPage />} />
-            <Route path="/content/:id" element={<Placeholder />} />
+            <Route path="/content/:id" element={<ContentViewPage />} />
             <Route path="/library" element={<Placeholder />} />
             <Route path="/assistant" element={<Placeholder />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />

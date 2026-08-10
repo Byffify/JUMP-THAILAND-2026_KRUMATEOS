@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" fill="none" role="img" aria-label="Quiz">
+  <rect width="320" height="200" rx="18" fill="#FFDDAC"/>
+  <circle cx="160" cy="100" r="62" fill="#FFFFFF" stroke="#F2E9DE" stroke-width="2"/>
+  <path d="M160 84 C160 78 165 75 172 78 C179 81 181 87 176 92 C171 97 160 98 160 108" stroke="#2F0F03" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="160" cy="126" r="5" fill="#FAAA48"/>
+  <path d="M108 58 L120 46 M212 58 L200 46" stroke="#FAAA48" stroke-width="6" stroke-linecap="round"/>
+</svg>

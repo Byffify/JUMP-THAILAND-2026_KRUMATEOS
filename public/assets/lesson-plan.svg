@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" fill="none" role="img" aria-label="Lesson Plan">
+  <rect width="320" height="200" rx="18" fill="#FFDDAC"/>
+  <rect x="86" y="34" width="148" height="132" rx="12" fill="#FFFFFF" stroke="#F2E9DE"/>
+  <rect x="100" y="52" width="90" height="10" rx="5" fill="#2F0F03"/>
+  <rect x="100" y="72" width="118" height="7" rx="3.5" fill="#E8DCCB"/>
+  <rect x="100" y="86" width="118" height="7" rx="3.5" fill="#E8DCCB"/>
+  <rect x="100" y="100" width="86" height="7" rx="3.5" fill="#E8DCCB"/>
+  <circle cx="136" cy="140" r="18" fill="#FAAA48"/>
+  <path d="M136 130 L136 150 M126 140 L146 140" stroke="#2F0F03" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="202" cy="64" r="16" fill="#FAAA48"/>
+  <path d="M202 58 L202 70 M195 64 L209 64" stroke="#2F0F03" stroke-width="3" stroke-linecap="round"/>
+</svg>

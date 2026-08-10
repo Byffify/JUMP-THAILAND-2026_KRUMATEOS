@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" fill="none" role="img" aria-label="AI Assistant">
+  <rect width="320" height="200" rx="18" fill="#FAAA48"/>
+  <rect x="74" y="50" width="172" height="110" rx="24" fill="#FFFFFF"/>
+  <path d="M126 160 L126 180 L146 160" fill="#2F0F03"/>
+  <circle cx="132" cy="100" r="10" fill="#2F0F03"/>
+  <circle cx="190" cy="100" r="10" fill="#2F0F03"/>
+  <path d="M146 122 C150 128 172 128 176 122" stroke="#FAAA48" stroke-width="5" stroke-linecap="round"/>
+</svg>

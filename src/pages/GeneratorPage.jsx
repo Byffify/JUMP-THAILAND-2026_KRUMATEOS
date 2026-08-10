@@ -25,6 +25,7 @@ export default function GeneratorPage() {
     quizKinds, setQuizKinds,
     quizCount, setQuizCount,
     pendingPrompt, setPendingPrompt,
+    pendingAllTypes, setPendingAllTypes,
   } = useApp();
   const genRef = useEntranceAnimation();
 
@@ -35,8 +36,11 @@ export default function GeneratorPage() {
   useEffect(() => {
     if (routeType && TYPE_ORDER.includes(routeType)) {
       setSelectedTypes(new Set([routeType]));
+    } else if (pendingAllTypes) {
+      setSelectedTypes(new Set(TYPE_ORDER));
     }
-  }, [routeType, setSelectedTypes]);
+    if (pendingAllTypes) setPendingAllTypes(false);
+  }, [routeType, pendingAllTypes, setSelectedTypes, setPendingAllTypes]);
 
   useEffect(() => {
     if (pendingPrompt) {

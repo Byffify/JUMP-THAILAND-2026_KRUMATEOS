@@ -7,6 +7,7 @@ export function AppProvider({ children }) {
   const [user, setUser] = useState(() => STORE.getUser());
   const [libQuery, setLibQuery] = useState(undefined);
   const [pendingPrompt, setPendingPrompt] = useState(null);
+  const [pendingAllTypes, setPendingAllTypes] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState(() => new Set());
   const [quizKinds, setQuizKinds] = useState(() => ['mc', 'tf', 'sa']);
   const [quizCount, setQuizCount] = useState(10);
@@ -36,6 +37,7 @@ export function AppProvider({ children }) {
       user, login, logout,
       libQuery, setLibQuery,
       pendingPrompt, setPendingPrompt,
+      pendingAllTypes, setPendingAllTypes,
       selectedTypes, setSelectedTypes, toggleType,
       quizKinds, setQuizKinds,
       quizCount, setQuizCount,

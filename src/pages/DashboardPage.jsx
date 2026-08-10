@@ -13,7 +13,7 @@ import SearchSuggest from '../components/SearchSuggest.jsx';
 
 export default function DashboardPage() {
   const { t, lang } = useI18n();
-  const { setLibQuery, setPendingPrompt } = useApp();
+  const { setLibQuery, setPendingPrompt, setPendingAllTypes } = useApp();
   const toast = useToast();
   const navigate = useNavigate();
   const qcRef = useEntranceAnimation();
@@ -152,7 +152,7 @@ export default function DashboardPage() {
                 <button
                   key={i}
                   className="card card-hover w-full text-left p-4 flex items-start gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                  onClick={() => { setPendingPrompt(s.prompt); navigate('/generator'); }}
+                  onClick={() => { setPendingPrompt(s.prompt); setPendingAllTypes(true); navigate('/generator'); }}
                 >
                   <span className="w-8 h-8 shrink-0 rounded-lg bg-peach text-dark font-semibold flex items-center justify-center">{i + 1}</span>
                   <span>

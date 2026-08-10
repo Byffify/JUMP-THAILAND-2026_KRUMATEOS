@@ -73,6 +73,7 @@ export const DICT = {
     'gen.error.prompt': 'Please write a short teaching prompt first.',
     'gen.error.none': 'Please select at least one output type.',
     'gen.error.quizKinds': 'Pick at least one quiz question type.',
+    'gen.error.failed': 'Generation failed. Please try again.',
     'gen.loading': 'Generating your materials…',
     'gen.loadingSub': 'This takes a few seconds. Sit tight!',
 
@@ -199,6 +200,7 @@ export const DICT = {
     'gen.error.prompt': 'กรุณาเขียนคำสั่งการสอนสั้น ๆ ก่อน',
     'gen.error.none': 'กรุณาเลือกประเภทผลงานอย่างน้อย 1 ประเภท',
     'gen.error.quizKinds': 'เลือกประเภทข้อสอบอย่างน้อย 1 ประเภท',
+    'gen.error.failed': 'การสร้างล้มเหลว กรุณาลองใหม่อีกครั้ง',
     'gen.loading': 'กำลังสร้างสื่อของคุณ…',
     'gen.loadingSub': 'ใช้เวลาไม่กี่วินาที รอสักครู่!',
 

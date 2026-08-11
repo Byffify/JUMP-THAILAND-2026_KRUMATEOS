@@ -3,3 +3,8 @@ dist/
 .superpowers/
 *.log
 .DS_Store
+
+# Environment variables — DO NOT commit API keys
+.env
+.env.local
+.env.*.local

@@ -76,7 +76,7 @@ export default function GeneratorPage() {
 
     try {
       const quizOpts = { count: Number(quizCount), kinds: quizKinds };
-      const items = await API.generate({ prompt: value, types, quizOpts, level, subject });
+      const items = await API.generate({ prompt: value, types, quizOpts, level, subject, lang });
       const item = items[0];
       Live.put(item);
       navigate('/content/' + item.id);

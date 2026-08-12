@@ -110,3 +110,39 @@ export function printItem(item) {
   root.innerHTML = renderPrintHTML(item);
   window.print();
 }
+
+export async function exportAsImage(contentBodyRef, item, toast) {
+  // ตรวจสอบว่า ref ชี้ไปที่ element จริงๆ
+  const element = contentBodyRef?.current;
+  if (!element) {
+    toast('ไม่พบเนื้อหาที่จะบันทึก', 'error');
+    return;
+  }
+
+  try {
+    toast('กำลังสร้างรูปภาพ...');
+
+    // โหลด html2canvas แบบ dynamic import (ไม่ต้อง import ที่บนไฟล์)
+    const html2canvas = (await import('html2canvas')).default;
+
+    // ถ่ายรูป element นั้น
+    const canvas = await html2canvas(element, {
+      scale: 2,              // ความละเอียดสูง (Retina)
+      useCORS: true,         // รองรับรูปจาก URL อื่น
+      backgroundColor: '#ffffff',  // พื้นหลังขาว
+      logging: false,
+    });
+
+    // แปลง canvas เป็น PNG แล้ว download
+    const link = document.createElement('a');
+    link.download = (item.title || 'material')
+      .replace(/[^\w\u0E00-\u0E7F-]+/g, '_') + '.png';  // รองรับชื่อไฟล์ภาษาไทย
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    toast('บันทึกรูปภาพสำเร็จ ✓', 'ok');
+  } catch (err) {
+    console.error('Export image failed:', err);
+    toast('บันทึกรูปภาพไม่สำเร็จ', 'error');
+  }
+}

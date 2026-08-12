@@ -3,14 +3,14 @@
    Port of js/app.js renderContent (434-463) + chrome markup from index.html.
    Class names, ids, glyphs and inline styles preserved verbatim.
    ========================================================================== */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { STORE } from '../services/store.js';
 import { labelFor } from '../data/types.js';
 import { useI18n } from '../context/I18nContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { renderItemBody } from '../components/ItemRenderers.jsx';
-import { copyItem, downloadItem, printItem } from '../utils/export.js';
+import { copyItem, downloadItem, printItem, exportAsImage } from '../utils/export.js';
 
 export default function ContentViewPage() {
   const { id } = useParams();
@@ -19,7 +19,7 @@ export default function ContentViewPage() {
 
   const [item, setItem] = useState(() => STORE.find(id));
   const [, setTick] = useState(0);
-
+  const contentBodyRef = useRef(null);
   useEffect(() => {
     setItem(STORE.find(id));
   }, [id]);
@@ -77,9 +77,12 @@ export default function ContentViewPage() {
             <button id="content-download" className="btn btn-secondary" onClick={() => downloadItem(item, toast)}>
               {t('content.download')}
             </button>
+            <button id="content-export-image" className="btn btn-secondary" onClick={() => exportAsImage(contentBodyRef, item, toast)}>
+              {t('content.exportImage') || 'Save as Image'}
+            </button>
           </div>
         </div>
-        <div id="content-body" className="space-y-6">{renderItemBody(item)}</div>
+        <div id="content-body" ref={contentBodyRef} className="space-y-6">{renderItemBody(item)}</div>
       </div>
     </section>
   );

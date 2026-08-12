@@ -1,4 +1,4 @@
-# KruMate OS
+# KruMate
 
 ## Overview
 

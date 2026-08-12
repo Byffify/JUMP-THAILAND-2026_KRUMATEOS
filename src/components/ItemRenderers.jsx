@@ -159,15 +159,15 @@ export function renderActivity(item) {
       </p>
       <div className="grid sm:grid-cols-3 gap-3 mb-6">
         <div className="rounded-xl bg-soft p-4 text-sm">
-          <span className="block font-semibold">⏱ {item.time}</span>
+          <span className="block font-semibold">{item.time}</span>
           <span className="text-muted">Duration</span>
         </div>
         <div className="rounded-xl bg-soft p-4 text-sm">
-          <span className="block font-semibold">👥 {item.groupSize}</span>
+          <span className="block font-semibold">{item.groupSize}</span>
           <span className="text-muted">Grouping</span>
         </div>
         <div className="rounded-xl bg-soft p-4 text-sm">
-          <span className="block font-semibold">🎯 Objective</span>
+          <span className="block font-semibold">Objective</span>
           <span className="text-muted block">{item.objective}</span>
         </div>
       </div>

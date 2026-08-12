@@ -66,7 +66,7 @@ export default function ContentViewPage() {
               className={'btn btn-primary' + (isSaved ? ' opacity-70' : '')}
               onClick={onSave}
             >
-              {isSaved ? '✓ ' + t('content.savedBadge') : t('content.save')}
+              {isSaved ? t('content.savedBadge') : t('content.save')}
             </button>
             <button id="content-copy" className="btn btn-secondary" onClick={() => copyItem(item, toast)}>
               {t('content.copy')}

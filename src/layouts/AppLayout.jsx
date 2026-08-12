@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet, Link, NavLink } from 'react-router-dom';
 import { useI18n } from '../context/I18nContext.jsx';
 import { useApp } from '../context/AppContext.jsx';
+import fullLogo from '../assets/full-logo.png';
 
 const NAV_ITEMS = [
   { to: '/dashboard', key: 'nav.dashboard' },
@@ -25,8 +26,7 @@ export default function AppLayout() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-6">
             <Link to="/dashboard" className="flex items-center gap-2 shrink-0">
-              <img src="/assets/logo.svg" alt="KruMate" className="w-9 h-9" />
-              <span className="font-semibold text-lg">KruMate&nbsp;OS</span>
+              <img src={fullLogo} alt="KruMate" className="h-8 w-auto" />
             </Link>
             <nav id="main-nav" className="hidden md:flex items-center gap-1 text-sm">
               {NAV_ITEMS.map(item => (
@@ -106,10 +106,9 @@ export default function AppLayout() {
       <footer className="border-t border-line py-6 mt-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted">
           <p>
-            © 2026 <span className="font-medium text-dark">KruMate OS</span> —{' '}
-            <span>{t('footer.tag')}</span>
+            <span className="font-medium text-dark">{t('footer.note')}</span>
           </p>
-          <p>{t('footer.note')}</p>
+          <p>{t('footer.tag')}</p>
         </div>
         <div id="print-root" className="print-only"></div>
       </footer>

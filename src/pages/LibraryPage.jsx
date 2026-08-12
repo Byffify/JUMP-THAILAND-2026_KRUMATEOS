@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { STORE } from '../services/store.js';
-import { assetFor, labelFor } from '../data/types.js';
+import { assetFor, labelFor, SUBJECTS } from '../data/types.js';
 import { fmtDate } from '../utils/format.js';
 import { useI18n } from '../context/I18nContext.jsx';
 import { useApp } from '../context/AppContext.jsx';
@@ -33,6 +33,7 @@ export default function LibraryPage() {
 
   const [input, setInput] = useState('');
   const [cat, setCat] = useState('');
+  const [subj, setSubj] = useState('');
   const [type, setType] = useState('all');
   const [, setTick] = useState(0);
 
@@ -44,7 +45,7 @@ export default function LibraryPage() {
   }, [libQuery, setLibQuery]);
 
   const cats = STORE.categories();
-  const items = STORE.search(input, type, cat);
+  const items = STORE.search(input, type, cat, subj);
 
   const chipOpts = [
     { val: 'all', label: t('lib.filterAll') },
@@ -103,6 +104,17 @@ export default function LibraryPage() {
             <option key={c} value={c}>{c}</option>
           ))}
         </select>
+        <select
+          id="lib-subject"
+          className="input md:w-52"
+          value={subj}
+          onChange={e => setSubj(e.target.value)}
+        >
+          <option value="">{t('lib.allSub')}</option>
+          {SUBJECTS.map(s => (
+            <option key={s.value} value={s.value}>{t(s.key)}</option>
+          ))}
+        </select>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6" id="lib-filters">
@@ -131,11 +143,17 @@ export default function LibraryPage() {
               <span className={'inline-block text-[11px] px-2 py-0.5 rounded-full ' + chipColor(i.type) + ' mb-2'}>{t(labelFor(i.type))}</span>
               <p className="font-semibold leading-snug mb-1">{i.title}</p>
               <p className="text-xs text-muted">{i.grade || ''}{i.grade && i.subject ? ' · ' : ' '}{i.subject || ''}</p>
-              <p className="text-xs text-muted mt-2">🕒 {fmtDate(i.updatedAt || i.createdAt)}</p>
+              <p className="text-xs text-muted mt-2">{t('lib.updatedAt')}: {fmtDate(i.updatedAt || i.createdAt)}</p>
             </div>
             <div className="px-4 pb-4 flex gap-2">
               <button className="btn btn-secondary flex-1 text-sm" onClick={() => navigate('/content/' + i.id)}>{t('lib.open')}</button>
-              <button className="btn btn-ghost px-3 text-sm" onClick={() => onDelete(i)} aria-label="Delete">🗑</button>
+              <button className="btn btn-ghost px-3 text-sm" onClick={() => onDelete(i)} aria-label={t('lib.deleteConfirm')}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M3 6h18" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+            </button>
             </div>
           </div>
         )) : (
@@ -144,7 +162,6 @@ export default function LibraryPage() {
       </div>
 
       <div id="lib-empty" className={'text-center py-16' + (items.length > 0 ? ' hidden' : '')}>
-        <p className="text-5xl mb-3">📚</p>
         <p className="font-medium">{t('lib.emptyTitle')}</p>
         <p className="text-muted text-sm mt-1">{t('lib.emptySub')}</p>
       </div>

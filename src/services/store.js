@@ -77,7 +77,7 @@ export const STORE = {
   },
   clearSearchHistory() { write(LS_SEARCH, []); },
 
-  search(q, type, category) {
+  search(q, type, category, subject) {
     let items = this.getLibrary();
     q = (q || '').trim().toLowerCase();
     if (q) {
@@ -89,6 +89,7 @@ export const STORE = {
     }
     if (type && type !== 'all') items = items.filter(i => i.type === type);
     if (category) items = items.filter(i => (i.category || '') === category);
+    if (subject) items = items.filter(i => (i.subject || '') === subject);
     return items;
   },
 

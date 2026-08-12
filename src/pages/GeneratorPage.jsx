@@ -55,7 +55,7 @@ export default function GeneratorPage() {
 
   const summary = t('gen.summary');
 
-  const ctaLabel = '✨ ' + t('gen.cta').replace(/✨\s?/, '');
+  const ctaLabel = t('gen.cta');
 
   const doGenerate = useCallback(async () => {
     if (generating) return;

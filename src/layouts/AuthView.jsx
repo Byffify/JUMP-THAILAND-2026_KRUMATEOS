@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useI18n } from '../context/I18nContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { useApp } from '../context/AppContext.jsx';
+import fullLogo from '../assets/full-logo.png';
 
 export default function AuthView() {
   const { t } = useI18n();
@@ -26,9 +27,8 @@ export default function AuthView() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-card border border-line p-8">
           <div className="flex items-center gap-3 mb-6">
-            <img src="/assets/logo.svg" alt="KruMate" className="w-11 h-11" />
+            <img src={fullLogo} alt="KruMate" className="h-9 w-auto" />
             <div>
-              <p className="font-semibold text-lg leading-tight">KruMate&nbsp;OS</p>
               <p className="text-muted text-sm">{t('login.subtitle')}</p>
             </div>
           </div>

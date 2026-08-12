@@ -52,7 +52,7 @@ export function textFor(item) {
 
 export function renderPrintHTML(item) {
   const label = typeLabel(item);
-  let s = `<h1>${sanitize(item.title)}</h1><p>(KruMate OS · ${sanitize(label)}${item.grade ? ' · ' + sanitize(item.grade) : ''}${item.subject ? ' · ' + sanitize(item.subject) : ''})</p>`;
+  let s = `<h1>${sanitize(item.title)}</h1><p>(KruMate · ${sanitize(label)}${item.grade ? ' · ' + sanitize(item.grade) : ''}${item.subject ? ' · ' + sanitize(item.subject) : ''})</p>`;
   if (item.type === 'lesson') {
     s += '<h2>Objectives</h2><ul>' + item.objectives.map(o => `<li>${sanitize(o)}</li>`).join('') + '</ul>';
     s += '<h2>Materials</h2><ul>' + item.materials.map(o => `<li>${sanitize(o)}</li>`).join('') + '</ul>';
@@ -140,7 +140,7 @@ export async function exportAsImage(contentBodyRef, item, toast) {
     link.href = canvas.toDataURL('image/png');
     link.click();
 
-    toast('บันทึกรูปภาพสำเร็จ ✓', 'ok');
+    toast('บันทึกรูปภาพสำเร็จ', 'ok');
   } catch (err) {
     console.error('Export image failed:', err);
     toast('บันทึกรูปภาพไม่สำเร็จ', 'error');

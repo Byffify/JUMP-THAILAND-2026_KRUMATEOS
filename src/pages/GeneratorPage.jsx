@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { TYPE_ORDER, LEVELS, SUBJECTS, levelLabel } from '../data/types.js';
+import { TYPE_ORDER, LEVELS, SUBJECTS, levelLabel, labelFor } from '../data/types.js';
 import { API } from '../services/api.js';
 import { Live } from '../services/store.js';
 import { useI18n } from '../context/I18nContext.jsx';
@@ -8,6 +8,7 @@ import { useApp } from '../context/AppContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { useEntranceAnimation } from '../hooks/useEntranceAnimation.js';
 import GeneratorTab from '../components/GeneratorTab.jsx';
+import PromptTemplate from '../components/PromptTemplate.jsx';
 
 const QUIZ_KINDS = [
   { value: 'mc', key: 'gen.kindMc' },
@@ -32,6 +33,12 @@ export default function GeneratorPage() {
   const [generating, setGenerating] = useState(false);
   const promptRef = useRef(null);
 
+  const [mode, setMode] = useState('free');
+  const [templateTopic, setTemplateTopic] = useState('');
+  const [templateDuration, setTemplateDuration] = useState('');
+  const [templateObjectives, setTemplateObjectives] = useState('');
+  const [templateNotes, setTemplateNotes] = useState('');
+
   const [selectedType, setSelectedType] = useState(() =>
     routeType && TYPE_ORDER.includes(routeType) ? routeType : 'lesson'
   );
@@ -46,6 +53,39 @@ export default function GeneratorPage() {
       setPendingPrompt(null);
     }
   }, [pendingPrompt, setPendingPrompt]);
+
+  const composeTemplatePrompt = useCallback(() => {
+    const topic = templateTopic.trim();
+    if (!topic) return '';
+    const grade = levelLabel(level, lang);
+    const subjectName = t(SUBJECTS.find(s => s.value === subject)?.key) || subject;
+    const lines = [];
+    if (lang === 'th') {
+      lines.push(`สร้าง${t(labelFor(selectedType))}เรื่อง "${topic}" สำหรับนักเรียน${grade} วิชา ${subjectName}`);
+      if (templateDuration.trim()) lines.push(`ระยะเวลา / จำนวนคาบ: ${templateDuration.trim()}`);
+      if (templateObjectives.trim()) lines.push(`จุดประสงค์การเรียนรู้: ${templateObjectives.trim()}`);
+      if (templateNotes.trim()) lines.push(`หมายเหตุเพิ่มเติม: ${templateNotes.trim()}`);
+    } else {
+      lines.push(`Create a ${t(labelFor(selectedType))} about "${topic}" for ${grade} students, subject: ${subjectName}`);
+      if (templateDuration.trim()) lines.push(`Duration: ${templateDuration.trim()}`);
+      if (templateObjectives.trim()) lines.push(`Learning objectives: ${templateObjectives.trim()}`);
+      if (templateNotes.trim()) lines.push(`Additional notes: ${templateNotes.trim()}`);
+    }
+    return lines.join('\n');
+  }, [templateTopic, templateDuration, templateObjectives, templateNotes, level, subject, lang, t]);
+
+  useEffect(() => {
+    if (mode === 'template') {
+      setPrompt(composeTemplatePrompt());
+    }
+  }, [mode, composeTemplatePrompt, setPrompt]);
+
+  const switchMode = useCallback(next => {
+    setMode(next);
+    if (next === 'template') {
+      setPrompt(composeTemplatePrompt());
+    }
+  }, [composeTemplatePrompt]);
 
   const toggleKind = useCallback(k => {
     setQuizKinds(prev =>
@@ -94,12 +134,60 @@ export default function GeneratorPage() {
         <p className="text-muted text-sm mt-1">{t('gen.sub')}</p>
       </div>
 
-      <div className="rounded-2xl bg-white border border-line shadow-card p-5 sm:p-8 mb-6">
-        <label htmlFor="gen-prompt" className="block text-sm font-medium mb-2">{t('gen.promptLabel')}</label>
+      <div className={'rounded-2xl bg-white border border-line shadow-card p-5 sm:p-8 mb-6' + (mode === 'template' ? ' mode-template' : '')}>
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          <button
+            id="gen-mode-template"
+            className={'btn px-4 py-2 text-sm rounded-full' + (mode === 'template' ? ' btn-primary' : ' btn-ghost')}
+            onClick={() => switchMode('template')}
+          >
+            {t('gen.modeTemplate')}
+          </button>
+          <button
+            id="gen-mode-free"
+            className={'btn px-4 py-2 text-sm rounded-full' + (mode === 'free' ? ' btn-primary' : ' btn-ghost')}
+            onClick={() => switchMode('free')}
+          >
+            {t('gen.modeFree')}
+          </button>
+          {mode === 'template' && (
+            <span className="text-xs text-muted ml-auto hidden sm:block">{t('gen.templateHint')}</span>
+          )}
+        </div>
+
+        {mode === 'template' ? (
+          <PromptTemplate
+            values={{
+              topic: templateTopic,
+              duration: templateDuration,
+              objectives: templateObjectives,
+              notes: templateNotes,
+              level,
+              subject,
+            }}
+            handlers={{
+              topic: e => setTemplateTopic(e.target.value),
+              duration: e => setTemplateDuration(e.target.value),
+              objectives: e => setTemplateObjectives(e.target.value),
+              notes: e => setTemplateNotes(e.target.value),
+              level: e => setLevel(e.target.value),
+              subject: e => setSubject(e.target.value),
+            }}
+            lang={lang}
+          />
+        ) : (
+          <label htmlFor="gen-prompt" className="block text-sm font-medium mb-2">{t('gen.promptLabel')}</label>
+        )}
+        {mode === 'template' && (
+          <span className="prompt-preview-label">
+            <span className="pulse" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 5.6L20 9.3l-4.4 4 1.1 6.1L12 16.9l-4.7 2.5L8.4 13.3 4 9.3l5.6-1.7z" transform="rotate(15 12 12)"/></svg></span>
+            {t('gen.promptPreview')}
+          </span>
+        )}
         <textarea
           id="gen-prompt"
           ref={promptRef}
-          rows="3"
+          rows={mode === 'template' ? 5 : 3}
           className="input text-base mb-3"
           placeholder={t('dash.promptPlaceholder')}
           value={prompt}
@@ -108,24 +196,26 @@ export default function GeneratorPage() {
         <div id="gen-error" className="hidden text-sm text-red-600 mb-3"></div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center mb-4">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="gen-level" className="text-sm font-medium text-muted">{t('gen.levelLabel')}</label>
-          <select id="gen-level" className="input sm:w-48" value={level} onChange={e => setLevel(e.target.value)}>
-            {LEVELS.map(lv => (
-              <option key={lv.value} value={lv.value}>{levelLabel(lv.value, lang)}</option>
-            ))}
-          </select>
+      {mode === 'free' && (
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center mb-4">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="gen-level" className="text-sm font-medium text-muted">{t('gen.levelLabel')}</label>
+            <select id="gen-level" className="input sm:w-48" value={level} onChange={e => setLevel(e.target.value)}>
+              {LEVELS.map(lv => (
+                <option key={lv.value} value={lv.value}>{levelLabel(lv.value, lang)}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor="gen-subject" className="text-sm font-medium text-muted">{t('gen.subjectLabel')}</label>
+            <select id="gen-subject" className="input sm:w-48" value={subject} onChange={e => setSubject(e.target.value)}>
+              {SUBJECTS.map(s => (
+                <option key={s.value} value={s.value}>{t(s.key)}</option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="gen-subject" className="text-sm font-medium text-muted">{t('gen.subjectLabel')}</label>
-          <select id="gen-subject" className="input sm:w-48" value={subject} onChange={e => setSubject(e.target.value)}>
-            {SUBJECTS.map(s => (
-              <option key={s.value} value={s.value}>{t(s.key)}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+      )}
 
       <h2 className="text-lg font-semibold mb-3">{t('gen.typesTitle')}</h2>
       <div

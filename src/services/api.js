@@ -1,7 +1,7 @@
 /* ==========================================================================
    KruMate OS — API layer
-   - ถ้ามี VITE_GEMINI_API_KEY → ใช้ Gemini จริง
-   - ถ้าไม่มี → fallback ไป mock (เหมือนเดิม)
+   - เรียก Gemini ผ่าน Serverless Function (/api/gemini) ถ้ามี key ฝั่ง server
+   - ถ้าไม่ได้ → fallback ไป mock (เหมือนเดิม)
    UI ไม่ต้องรู้ว่าใช้ตัวไหน — ใช้ API.generate() เหมือนเดิมทุกอย่าง
    ========================================================================== */
 import { generateItems } from '../data/generator.js';
@@ -10,7 +10,6 @@ import {
   geminiGenerate,
   geminiSuggestions,
   geminiAssistant,
-  isGeminiConfigured,
 } from './geminiService.js';
 import { fmtId } from '../utils/format.js';
 
@@ -25,12 +24,14 @@ export const API = {
   async generate({ prompt, types, quizOpts, level, subject, lang }) {
     const type = (types && types[0]) || 'lesson';
 
-    // ถ้ามี Gemini API key → ใช้ AI จริง
-    if (isGeminiConfigured()) {
+    // พยายามใช้ Gemini ผ่าน serverless proxy ก่อน
+    try {
       const item = await geminiGenerate({ prompt, type, quizOpts, level, subject, lang });
       item.id = fmtId();
       STORE.recordGeneration(1);
       return [item];
+    } catch (e) {
+      console.warn('Gemini generate failed, using fallback:', e);
     }
 
     // Fallback: mock (เหมือนเดิม)
@@ -45,13 +46,11 @@ export const API = {
    * @returns {Promise<Array>} [{title, prompt}]
    */
   async suggestions(lang) {
-    if (isGeminiConfigured()) {
-      try {
-        return await geminiSuggestions(lang);
-      } catch (e) {
-        console.warn('Gemini suggestions failed, using fallback:', e);
-        // fallback ด้านล่าง
-      }
+    try {
+      return await geminiSuggestions(lang);
+    } catch (e) {
+      console.warn('Gemini suggestions failed, using fallback:', e);
+      // fallback ด้านล่าง
     }
 
     // Fallback mock
@@ -71,12 +70,10 @@ export const API = {
    * @returns {Promise<string>}
    */
   async assistant(message, lang) {
-    if (isGeminiConfigured()) {
-      try {
-        return await geminiAssistant(message, lang);
-      } catch (e) {
-        console.warn('Gemini assistant failed, using fallback:', e);
-      }
+    try {
+      return await geminiAssistant(message, lang);
+    } catch (e) {
+      console.warn('Gemini assistant failed, using fallback:', e);
     }
 
     // Fallback mock

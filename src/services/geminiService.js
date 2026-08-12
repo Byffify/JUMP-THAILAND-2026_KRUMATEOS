@@ -1,35 +1,33 @@
 /* ==========================================================================
    KruMate OS — Gemini AI Service
    ติดต่อ Gemini API จริง ๆ เพื่อสร้างสื่อการสอน
-   API key อยู่ใน .env (VITE_GEMINI_API_KEY) — ไม่ถูก expose ตอน deploy
+   ผ่าน Vercel Serverless Function (/api/gemini) ซึ่งถือ API key ฝั่ง Server
+   เพื่อไม่ให้ key หลุดลงใน bundle ที่ผู้ใช้ดาวน์โหลดได้
    ========================================================================== */
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
-// ส่ง prompt ไปหา Gemini และรับ text กลับมา
+// ส่ง prompt ไปยัง /api/gemini (serverless proxy) และรับ text กลับมา
 async function callGemini(prompt) {
-  const res = await fetch(GEMINI_URL, {
+  const res = await fetch('/api/gemini', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 4096,
-      },
+      prompt,
+      model: GEMINI_MODEL,
+      temperature: 0.7,
+      maxOutputTokens: 4096,
     }),
   });
 
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Gemini API error ${res.status}: ${err}`);
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok || !data?.ok) {
+    const msg = data?.error || `HTTP ${res.status}`;
+    throw new Error(`Gemini API error: ${msg}`);
   }
 
-  const data = await res.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  return text;
+  return data.text || '';
 }
 
 // แปลง text ที่ได้จาก Gemini (JSON string) ให้เป็น object
@@ -317,9 +315,4 @@ export async function geminiSuggestions(lang) {
 export async function geminiAssistant(message, lang) {
   const text = await callGemini(assistantPrompt({ message, lang }));
   return text;
-}
-
-// ตรวจสอบว่า API key ถูกตั้งค่าแล้วหรือยัง
-export function isGeminiConfigured() {
-  return Boolean(GEMINI_API_KEY && GEMINI_API_KEY !== 'your_api_key_here');
 }

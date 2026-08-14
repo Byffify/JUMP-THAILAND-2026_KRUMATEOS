@@ -1,12 +1,14 @@
 export default function GuideArticle({ topic, onClose }) {
   return (
-    <div className="card mt-3 p-5 sm:p-6">
+    <div className="card p-5 sm:p-6">
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-3">
           {topic.icon && <img src={topic.icon} alt="" className="w-12 h-12 object-contain shrink-0" />}
-          <h3 className="text-lg font-semibold">{topic.title}</h3>
+          <h1 className="text-xl sm:text-2xl font-semibold">{topic.title}</h1>
         </div>
-        <button type="button" className="btn btn-ghost px-2.5 text-sm" onClick={onClose}>✕</button>
+        {onClose && (
+          <button type="button" className="btn btn-ghost px-2.5 text-sm" onClick={onClose}>✕</button>
+        )}
       </div>
       <p className="text-muted text-sm mb-4">{topic.summary}</p>
       <ol className="space-y-5">

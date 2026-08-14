@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../context/I18nContext.jsx';
 import { GUIDE_CATS, FAQ_CATS, getGuide, getFaq } from '../data/support.js';
 import SupportTabs from '../components/support/SupportTabs.jsx';
-import GuideArticle from '../components/support/GuideArticle.jsx';
 import FaqItem from '../components/support/FaqItem.jsx';
 
 const TABS = [
@@ -12,9 +12,9 @@ const TABS = [
 
 export default function SupportPage() {
   const { t, lang } = useI18n();
+  const navigate = useNavigate();
   const [tab, setTab] = useState('guide');
   const [query, setQuery] = useState('');
-  const [openTopic, setOpenTopic] = useState(null);
   const [openFaq, setOpenFaq] = useState(null);
 
   const guide = useMemo(() => getGuide(lang), [lang]);
@@ -50,8 +50,9 @@ export default function SupportPage() {
       <div className="relative max-w-xl mb-6">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">⌕</span>
         <input
+          id="support-search"
           type="search"
-          className="input pl-11"
+          className="input"
           placeholder={t('support.searchPh')}
           value={query}
           onChange={e => setQuery(e.target.value)}
@@ -77,26 +78,19 @@ export default function SupportPage() {
                 {cat.icon && <img src={cat.icon} alt="" className="w-5 h-5 object-contain" />}
                 {t(cat.key)}
               </h2>
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {topics.map(topic => (
-                  <div key={topic.id}>
-                    <button
-                      type="button"
-                      className="card card-hover w-full text-left p-4 flex items-center gap-3"
-                      onClick={() => setOpenTopic(openTopic === topic.id ? null : topic.id)}
-                      aria-expanded={openTopic === topic.id}
-                    >
-                      {topic.icon && <img src={topic.icon} alt="" className="w-11 h-11 rounded-lg object-contain bg-soft/40 border border-line shrink-0" />}
-                      <span className="flex-1 min-w-0">
-                        <span className="block font-medium">{topic.title}</span>
-                        <span className="block text-sm text-muted">{topic.summary}</span>
-                      </span>
-                      <span className="text-muted">{openTopic === topic.id ? '−' : '→'}</span>
-                    </button>
-                    {openTopic === topic.id && (
-                      <GuideArticle topic={topic} onClose={() => setOpenTopic(null)} />
-                    )}
-                  </div>
+                  <button
+                    key={topic.id}
+                    type="button"
+                    className="card card-hover w-full text-left p-5 aspect-square flex flex-col items-start gap-3"
+                    onClick={() => navigate('/support/guide/' + topic.id)}
+                    aria-label={topic.title}
+                  >
+                    {topic.icon && <img src={topic.icon} alt="" className="w-12 h-12 object-contain" />}
+                    <span className="font-medium leading-snug">{topic.title}</span>
+                    <span className="text-sm text-muted">{topic.summary}</span>
+                  </button>
                 ))}
               </div>
             </div>

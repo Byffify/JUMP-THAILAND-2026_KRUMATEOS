@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { to: '/generator', key: 'nav.generator' },
   { to: '/library', key: 'nav.library' },
   { to: '/assistant', key: 'nav.assistant' },
+  { to: '/support', key: 'support.link' },
 ];
 
 export default function AppLayout() {

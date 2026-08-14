@@ -1,5 +1,3 @@
-import { assetFor } from './types.js';
-
 export const GUIDE_CATS = [
   { id: 'getting-started',   icon: 'assets/plan_for_teacher.png',  key: 'support.cat.gettingStarted' },
   { id: 'content-types',     icon: 'assets/Class Activity.png',    key: 'support.cat.contentTypes' },
@@ -12,167 +10,36 @@ export const FAQ_CATS = [
   { id: 'technical',  icon: 'assets/quiz.svg',        key: 'support.cat.faqTechnical' },
 ];
 
-const icons = {
-  lesson: 'assets/plan_for_teacher.png',
-  worksheet: 'assets/Worksheet.png',
-  quiz: 'assets/Quiz.png',
-  slides: 'assets/Presentation Slides.png',
-  rubric: 'assets/Assessment.png',
-  activity: 'assets/Class Activity.png',
-};
-const typeIcon = t => icons[t] || assetFor(t);
-
 const GUIDE = { en: [], th: [] };
 const FAQ = { en: [], th: [] };
 
 // ---------- Teacher's Guide — content ----------
 GUIDE.en.push({
-  id: 'create-activity',
+  id: 'create-material',
   category: 'content-types',
-  icon: typeIcon('activity'),
-  title: 'Create a classroom activity',
-  summary: 'Turn a prompt into a ready-to-use hands-on activity in 3 steps.',
+  icon: 'assets/Class Activity.png',
+  title: 'Create teaching materials',
+  summary: 'Every output type — lesson plan, worksheet, quiz, slides, rubric, classroom activity — is created the same way. Pick a type, write one prompt, and generate.',
   steps: [
     { title: 'Open the generator', text: 'Click "Generator" in the top nav, or use Quick Create on the dashboard.', screenshot: { src: 'support/create-activity-1.png', alt: 'Generator page' } },
-    { title: 'Select the classroom-activity type', text: 'Pick "Classroom Activity" from the output-type tabs, then set your study level and subject.' },
-    { title: 'Write a prompt and generate', text: 'Type what you want your students to do and click "Generate". The activity appears on the preview page, ready to save or print.' },
+    { title: 'Pick the output type', text: 'Choose one of the six types: Lesson Plan, Worksheet, Quiz, Slides, Rubric, or Classroom Activity.' },
+    { title: 'Set level and subject', text: 'Optionally choose the study level and subject so the material matches your class.' },
+    { title: 'Write your prompt', text: 'Describe what you need — in free mode type any prompt, or in template mode fill in the topic form and the prompt builds itself.' },
+    { title: 'Generate and apply', text: 'Click "Generate". Review the result on the preview page, then save it to your library, print it, or export it as an image.' },
   ],
 });
 GUIDE.th.push({
-  id: 'create-activity',
+  id: 'create-material',
   category: 'content-types',
-  icon: typeIcon('activity'),
-  title: 'สร้างกิจกรรมในชั้นเรียน',
-  summary: 'เปลี่ยนคำสั่งของคุณเป็นกิจกรรมที่พร้อมใช้ได้ใน 3 ขั้นตอน',
+  icon: 'assets/Class Activity.png',
+  title: 'สร้างสื่อการสอน',
+  summary: 'ผลงานทุกประเภท — แผนการสอน ใบงาน แบบทดสอบ สไลด์ เกณฑ์การประเมิน กิจกรรมในชั้นเรียน — สร้างด้วยวิธีเดียวกัน เลือกประเภท เขียนคำสั่งหนึ่งบรรทัด แล้วสร้าง',
   steps: [
     { title: 'เปิดเครื่องมือสร้าง', text: 'คลิก "เครื่องมือสร้าง" ที่แถบด้านบน หรือใช้ "สร้างด่วน" บนหน้าหลัก', screenshot: { src: 'support/create-activity-1.png', alt: 'หน้าเครื่องมือสร้าง' } },
-    { title: 'เลือกประเภท "กิจกรรมในชั้นเรียน"', text: 'เลือก "กิจกรรมในชั้นเรียน" จากแถบประเภทผลงาน แล้วตั้งค่าระดับชั้นและวิชา' },
-    { title: 'เขียนคำสั่งและสร้าง', text: 'พิมพ์สิ่งที่ต้องการให้นักเรียนทำ แล้วคลิก "สร้างเลย" กิจกรรมจะปรากฏบนหน้าพรีวิว พร้อมบันทึกหรือพิมพ์' },
-  ],
-});
-
-GUIDE.en.push({
-  id: 'create-lesson',
-  category: 'content-types',
-  icon: typeIcon('lesson'),
-  title: 'Create a lesson plan',
-  summary: 'Generate a structured lesson plan with objectives, materials and procedure.',
-  steps: [
-    { title: 'Start from the generator', text: 'Go to Generator and choose "Lesson Plan" as the output type.' },
-    { title: 'Use the template or free prompt', text: 'Template mode fills topic, level, subject and objectives for you; free mode accepts any prompt.' },
-    { title: 'Generate and preview', text: 'Click "Generate", review the plan on the preview page, then save it to your library.' },
-  ],
-});
-GUIDE.th.push({
-  id: 'create-lesson',
-  category: 'content-types',
-  icon: typeIcon('lesson'),
-  title: 'สร้างแผนการสอน',
-  summary: 'สร้างแผนการสอนแบบมีโครงสร้าง พร้อมจุดประสงค์ สื่อ และขั้นตอน',
-  steps: [
-    { title: 'เริ่มจากเครื่องมือสร้าง', text: 'ไปที่เครื่องมือสร้าง แล้วเลือก "แผนการสอน" เป็นประเภทผลงาน' },
-    { title: 'ใช้เทมเพลตหรือพิมพ์เอง', text: 'โหมดเทมเพลตกรอกหัวข้อ ระดับชั้น วิชา และจุดประสงค์ให้อัตโนมัติ ส่วนโหมดอิสระรับคำสั่งใดก็ได้' },
-    { title: 'สร้างและดูตัวอย่าง', text: 'คลิก "สร้างเลย" ตรวจสอบแผนบนหน้าพรีวิว แล้วบันทึกลงคลังของคุณ' },
-  ],
-});
-
-GUIDE.en.push({
-  id: 'create-worksheet',
-  category: 'content-types',
-  icon: typeIcon('worksheet'),
-  title: 'Create a worksheet',
-  summary: 'Make printable practice exercises for your students.',
-  steps: [
-    { title: 'Choose the worksheet type', text: 'In the generator, select "Worksheet".' },
-    { title: 'Describe the exercise', text: 'Tell the AI the skill or content the worksheet should practise.' },
-    { title: 'Generate and export', text: 'Generate, then use Download or "Save as Image" to share it with students.' },
-  ],
-});
-GUIDE.th.push({
-  id: 'create-worksheet',
-  category: 'content-types',
-  icon: typeIcon('worksheet'),
-  title: 'สร้างใบงาน',
-  summary: 'สร้างแบบฝึกหัดแบบพิมพ์ได้สำหรับนักเรียน',
-  steps: [
-    { title: 'เลือกประเภทใบงาน', text: 'ในเครื่องมือสร้าง เลือก "ใบงาน"' },
-    { title: 'อธิบายแบบฝึกหัด', text: 'บอก AI ถึงทักษะหรือเนื้อหาที่ใบงานควรให้ฝึก' },
-    { title: 'สร้างและส่งออก', text: 'สร้างแล้วใช้ "ดาวน์โหลด" หรือ "บันทึกเป็นรูปภาพ" เพื่อส่งให้นักเรียน' },
-  ],
-});
-
-GUIDE.en.push({
-  id: 'create-quiz',
-  category: 'content-types',
-  icon: typeIcon('quiz'),
-  title: 'Create a quiz',
-  summary: 'Build a quiz with multiple choice, true/false and short-answer questions.',
-  steps: [
-    { title: 'Select quiz', text: 'Choose "Quiz" as the output type.' },
-    { title: 'Set quiz options', text: 'Pick the number of questions (5–30) and the question types: multiple choice, true/false, short answer.' },
-    { title: 'Generate and review', text: 'Generate, review the questions, and fix anything with a follow-up prompt.' },
-  ],
-});
-GUIDE.th.push({
-  id: 'create-quiz',
-  category: 'content-types',
-  icon: typeIcon('quiz'),
-  title: 'สร้างแบบทดสอบ',
-  summary: 'สร้างข้อสอบปรนัย ถูก/ผิด และข้อเขียนสั้น',
-  steps: [
-    { title: 'เลือกแบบทดสอบ', text: 'เลือก "แบบทดสอบ" เป็นประเภทผลงาน' },
-    { title: 'ตั้งค่าข้อสอบ', text: 'เลือกจำนวนข้อ (5–30) และประเภทคำถาม: ปรนัย ถูก/ผิด ข้อเขียนสั้น' },
-    { title: 'สร้างและตรวจทาน', text: 'สร้าง แล้วตรวจสอบคำถามและแก้ไขด้วยคำสั่งเพิ่มเติมได้' },
-  ],
-});
-
-GUIDE.en.push({
-  id: 'create-slides',
-  category: 'content-types',
-  icon: typeIcon('slides'),
-  title: 'Create presentation slides',
-  summary: 'Get a presentation outline and slide content in seconds.',
-  steps: [
-    { title: 'Choose slides', text: 'Select "Slides" in the generator.' },
-    { title: 'Write the topic', text: 'Describe the topic and audience, e.g. "Grade 6 science about ecosystems".' },
-    { title: 'Generate and export', text: 'Generate the deck outline, then print or export it as an image.' },
-  ],
-});
-GUIDE.th.push({
-  id: 'create-slides',
-  category: 'content-types',
-  icon: typeIcon('slides'),
-  title: 'สร้างสไลด์นำเสนอ',
-  summary: 'ได้โครงร่างการนำเสนอและเนื้อหาสไลด์ภายในไม่กี่วินาที',
-  steps: [
-    { title: 'เลือกสไลด์', text: 'เลือก "สไลด์" ในเครื่องมือสร้าง' },
-    { title: 'เขียนหัวข้อ', text: 'อธิบายหัวข้อและกลุ่มเป้าหมาย เช่น "วิทยาศาสตร์ ป.6 เรื่องระบบนิเวศ"' },
-    { title: 'สร้างและส่งออก', text: 'สร้างโครงร่างการนำเสนอ แล้วพิมพ์หรือส่งออกเป็นรูปภาพ' },
-  ],
-});
-
-GUIDE.en.push({
-  id: 'create-rubric',
-  category: 'content-types',
-  icon: typeIcon('rubric'),
-  title: 'Create a rubric',
-  summary: 'Build an assessment rubric with criteria and scoring levels.',
-  steps: [
-    { title: 'Choose rubric', text: 'Select "Rubric" as the output type.' },
-    { title: 'Describe the assessment', text: 'Tell the AI what you are assessing and the scoring scale you want.' },
-    { title: 'Generate and adjust', text: 'Generate the rubric and edit criteria so it fits your class.' },
-  ],
-});
-GUIDE.th.push({
-  id: 'create-rubric',
-  category: 'content-types',
-  icon: typeIcon('rubric'),
-  title: 'สร้างเกณฑ์การประเมิน',
-  summary: 'สร้างเกณฑ์การประเมินพร้อมตัวชี้วัดและระดับคะแนน',
-  steps: [
-    { title: 'เลือกเกณฑ์การประเมิน', text: 'เลือก "เกณฑ์การประเมิน" เป็นประเภทผลงาน' },
-    { title: 'อธิบายการประเมิน', text: 'บอก AI ว่าต้องการประเมินอะไรและใช้ระดับคะแนนแบบใด' },
-    { title: 'สร้างและปรับแก้', text: 'สร้างเกณฑ์แล้วแก้ไขตัวชี้วัดให้เหมาะกับชั้นเรียน' },
+    { title: 'เลือกประเภทผลงาน', text: 'เลือกหนึ่งในหกประเภท: แผนการสอน ใบงาน แบบทดสอบ สไลด์ เกณฑ์การประเมิน หรือกิจกรรมในชั้นเรียน' },
+    { title: 'ตั้งค่าระดับชั้นและวิชา', text: 'เลือกระดับชั้นและวิชาเพื่อให้สื่อตรงกับชั้นเรียนของคุณ' },
+    { title: 'เขียนคำสั่ง', text: 'บอกสิ่งที่ต้องการ — โหมดอิสระพิมพ์คำสั่งได้เลย หรือโหมดเทมเพลตกรอกแบบฟอร์มหัวข้อแล้วคำสั่งถูกสร้างให้อัตโนมัติ' },
+    { title: 'สร้างและนำไปใช้', text: 'คลิก "สร้างเลย" ตรวจสอบผลลัพธ์บนหน้าพรีวิว แล้วบันทึกลงคลัง พิมพ์ หรือส่งออกเป็นรูปภาพ' },
   ],
 });
 

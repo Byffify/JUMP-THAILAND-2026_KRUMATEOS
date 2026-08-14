@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { to: '/generator', key: 'nav.generator' },
   { to: '/library', key: 'nav.library' },
   { to: '/assistant', key: 'nav.assistant' },
+  { to: '/support', key: 'support.link' },
 ];
 
 export default function AppLayout() {
@@ -108,10 +109,7 @@ export default function AppLayout() {
           <p>
             <span className="font-medium text-dark">{t('footer.note')}</span>
           </p>
-          <p>
-            {t('footer.tag')} ·{' '}
-            <Link to="/support" className="underline hover:text-primary">{t('support.link')}</Link>
-          </p>
+          <p>{t('footer.tag')}</p>
         </div>
         <div id="print-root" className="print-only"></div>
       </footer>

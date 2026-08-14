@@ -145,7 +145,22 @@ export const DICT = {
 
     'footer.tag': 'We Don\'t Replace Teachers. We Give Their Time Back.',
     'footer.note': '@2026 Krumate',
-    'app.logout': 'Log out'
+    'app.logout': 'Log out',
+
+    'support.link': 'Support',
+    'support.title': 'Help Center',
+    'support.sub': 'Teacher\'s Guide and frequently asked questions — get the most out of KruMate.',
+    'support.guideTab': 'Teacher\'s Guide',
+    'support.faqTab': 'FAQ',
+    'support.searchPh': 'Search help…',
+    'support.noResults': 'No results found. Try different keywords.',
+    'support.clearSearch': 'Clear search',
+    'support.cat.gettingStarted': 'Getting started',
+    'support.cat.contentTypes': 'Content types',
+    'support.cat.libraryExport': 'Library & export',
+    'support.cat.assistantTemplate': 'Assistant & template mode',
+    'support.cat.faqGenerating': 'Generating content',
+    'support.cat.faqTechnical': 'Export & technical'
   },
 
   th: {
@@ -294,7 +309,22 @@ export const DICT = {
 
     'footer.tag': 'We Don\'t Replace Teachers. We Give Their Time Back.',
     'footer.note': '@2026 Krumate',
-    'app.logout': 'ออกจากระบบ'
+    'app.logout': 'ออกจากระบบ',
+
+    'support.link': 'ช่วยเหลือ',
+    'support.title': 'ศูนย์ช่วยเหลือ',
+    'support.sub': 'คู่มือครูและคำถามที่พบบ่อย — ใช้ KruMate ให้เต็มศักยภาพ',
+    'support.guideTab': 'คู่มือครู',
+    'support.faqTab': 'คำถามที่พบบ่อย',
+    'support.searchPh': 'ค้นหาคำแนะนำ…',
+    'support.noResults': 'ไม่พบผลลัพธ์ ลองค้นหาด้วยคำอื่น',
+    'support.clearSearch': 'ล้างการค้นหา',
+    'support.cat.gettingStarted': 'เริ่มต้นใช้งาน',
+    'support.cat.contentTypes': 'ประเภทผลงาน',
+    'support.cat.libraryExport': 'คลังเนื้อหาและการส่งออก',
+    'support.cat.assistantTemplate': 'ผู้ช่วย AI และโหมดเทมเพลต',
+    'support.cat.faqGenerating': 'การสร้างเนื้อหา',
+    'support.cat.faqTechnical': 'การส่งออกและเทคนิค'
   }
 };
 

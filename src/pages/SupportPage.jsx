@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useI18n } from '../context/I18nContext.jsx';
 import { GUIDE_CATS, FAQ_CATS, getGuide, getFaq } from '../data/support.js';
 import SupportTabs from '../components/support/SupportTabs.jsx';
@@ -12,7 +12,6 @@ const TABS = [
 
 export default function SupportPage() {
   const { t, lang } = useI18n();
-  const navigate = useNavigate();
   const [tab, setTab] = useState('guide');
   const [query, setQuery] = useState('');
   const [openFaq, setOpenFaq] = useState(null);
@@ -71,26 +70,27 @@ export default function SupportPage() {
           <button className="btn btn-secondary" onClick={() => setQuery('')}>{t('support.clearSearch')}</button>
         </div>
       ) : tab === 'guide' ? (
-        <div className="space-y-8">
+        <div className="space-y-6">
           {groupByCat(filteredGuide).map(({ cat, topics }) => (
-            <div key={cat.id}>
-              <h2 className="text-base font-semibold mb-3 flex items-center gap-2">
-                {cat.icon && <img src={cat.icon} alt="" className="w-5 h-5 object-contain" />}
-                {t(cat.key)}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div key={cat.id} className="card p-5">
+              <div className="flex items-center gap-2 mb-4">
+                {cat.icon && <img src={cat.icon} alt="" className="w-6 h-6 object-contain" />}
+                <h2 className="text-base font-semibold">{t(cat.key)}</h2>
+              </div>
+              <div className="divide-y divide-line">
                 {topics.map(topic => (
-                  <button
+                  <Link
                     key={topic.id}
-                    type="button"
-                    className="card card-hover w-full text-left p-5 aspect-square flex flex-col items-start gap-3"
-                    onClick={() => navigate('/support/guide/' + topic.id)}
-                    aria-label={topic.title}
+                    to={'/support/guide/' + topic.id}
+                    className="flex items-center gap-3 py-3 text-left w-full"
                   >
-                    {topic.icon && <img src={topic.icon} alt="" className="w-12 h-12 object-contain" />}
-                    <span className="font-medium leading-snug">{topic.title}</span>
-                    <span className="text-sm text-muted">{topic.summary}</span>
-                  </button>
+                    {topic.icon && <img src={topic.icon} alt="" className="w-8 h-8 object-contain shrink-0" />}
+                    <span className="flex-1 min-w-0">
+                      <span className="block font-medium">{topic.title}</span>
+                      <span className="block text-sm text-muted">{topic.summary}</span>
+                    </span>
+                    <span className="text-muted shrink-0">→</span>
+                  </Link>
                 ))}
               </div>
             </div>

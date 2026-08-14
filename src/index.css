@@ -469,3 +469,9 @@ select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csv
   border-color: #FAAA48;
   background: #FFDDAC;
 }
+
+/* ---------- Support ---------- */
+.img-placeholder {
+  background-image: repeating-linear-gradient(45deg, #FBF3E8 0 10px, #F2E9DE 10px 20px);
+  border: 1px dashed #B9A58F;
+}

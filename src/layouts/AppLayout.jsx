@@ -108,7 +108,10 @@ export default function AppLayout() {
           <p>
             <span className="font-medium text-dark">{t('footer.note')}</span>
           </p>
-          <p>{t('footer.tag')}</p>
+          <p>
+            {t('footer.tag')} ·{' '}
+            <Link to="/support" className="underline hover:text-primary">{t('support.link')}</Link>
+          </p>
         </div>
         <div id="print-root" className="print-only"></div>
       </footer>

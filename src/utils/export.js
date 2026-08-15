@@ -131,6 +131,14 @@ export async function exportAsImage(contentBodyRef, item, toast) {
       useCORS: true,         // รองรับรูปจาก URL อื่น
       backgroundColor: '#ffffff',  // พื้นหลังขาว
       logging: false,
+      onclone: doc => {
+        const el = doc.getElementById('slide-capture');
+        if (el) {
+          el.style.left = '0px';
+          el.style.position = 'absolute';
+          el.style.top = '0px';
+        }
+      },
     });
 
     // แปลง canvas เป็น PNG แล้ว download

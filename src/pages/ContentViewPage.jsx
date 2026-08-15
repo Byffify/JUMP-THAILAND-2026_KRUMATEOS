@@ -9,17 +9,19 @@ import { STORE } from '../services/store.js';
 import { labelFor } from '../data/types.js';
 import { useI18n } from '../context/I18nContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
+import SlideshowView from '../components/SlideshowView.jsx';
 import { renderItemBody } from '../components/ItemRenderers.jsx';
 import { copyItem, downloadItem, printItem, exportAsImage } from '../utils/export.js';
 
 export default function ContentViewPage() {
   const { id } = useParams();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const toast = useToast();
 
   const [item, setItem] = useState(() => STORE.find(id));
   const [, setTick] = useState(0);
   const contentBodyRef = useRef(null);
+  const captureRef = useRef(null);
   useEffect(() => {
     setItem(STORE.find(id));
   }, [id]);
@@ -35,12 +37,18 @@ export default function ContentViewPage() {
   }
 
   const onSave = () => {
+    if (item.isTemplate) {
+      STORE.cloneTemplate(item);
+      toast(t('content.toastSavedTemplate'), 'ok');
+      setTick(n => n + 1);
+      return;
+    }
     STORE.save(item);
     toast(t('content.toastSaved'), 'ok');
     setTick(n => n + 1);
   };
 
-  const isSaved = !!STORE.itemById(item.id);
+  const isSaved = !!STORE.itemById(item.id) && !item.isTemplate;
 
   return (
     <section id="page-content" className="page">
@@ -66,7 +74,7 @@ export default function ContentViewPage() {
               className={'btn btn-primary' + (isSaved ? ' opacity-70' : '')}
               onClick={onSave}
             >
-              {isSaved ? t('content.savedBadge') : t('content.save')}
+              {item.isTemplate ? t('content.saveToLibrary') : (isSaved ? t('content.savedBadge') : t('content.save'))}
             </button>
             <button id="content-copy" className="btn btn-secondary" onClick={() => copyItem(item, toast)}>
               {t('content.copy')}
@@ -77,12 +85,18 @@ export default function ContentViewPage() {
             <button id="content-download" className="btn btn-secondary" onClick={() => downloadItem(item, toast)}>
               {t('content.download')}
             </button>
-            <button id="content-export-image" className="btn btn-secondary" onClick={() => exportAsImage(contentBodyRef, item, toast)}>
+            <button id="content-export-image" className="btn btn-secondary" onClick={() => exportAsImage(item.type === 'slides' ? captureRef : contentBodyRef, item, toast)}>
               {t('content.exportImage') || 'Save as Image'}
             </button>
           </div>
         </div>
-        <div id="content-body" ref={contentBodyRef} className="space-y-6">{renderItemBody(item)}</div>
+        <div id="content-body" className="space-y-6">
+          {item.type === 'slides' ? (
+            <SlideshowView item={item} lang={lang} captureRef={captureRef} />
+          ) : (
+            <div ref={contentBodyRef}>{renderItemBody(item, lang)}</div>
+          )}
+        </div>
       </div>
     </section>
   );

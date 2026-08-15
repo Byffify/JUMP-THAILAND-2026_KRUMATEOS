@@ -199,6 +199,44 @@ export function renderActivity(item) {
   );
 }
 
+export function renderSlideCard(s, i, lang) {
+  const dark = i % 2 === 1;
+  return (
+    <div
+      key={i}
+      className={
+        'relative aspect-video rounded-3xl overflow-hidden p-8 sm:p-12 flex flex-col justify-between ' +
+        (dark
+          ? 'bg-gradient-to-br from-dark via-[#3A1A08] to-[#2F0F03] text-white'
+          : 'bg-gradient-to-br from-cream via-[#FFF6EA] to-peach/50 border border-line')
+      }
+    >
+      <div className="flex items-center justify-between">
+        <span className={'text-xs font-semibold ' + (dark ? 'text-white/50' : 'text-muted')}>
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        <span className={'w-10 h-10 ' + (dark ? 'bg-primary/25' : 'bg-primary/15') + ' rounded-xl'}></span>
+      </div>
+      <div className="max-w-3xl">
+        {s.subtitle && (
+          <p className="text-xs sm:text-sm mb-2 font-medium text-primary">{loc(s.subtitle, lang)}</p>
+        )}
+        <h3 className="font-semibold text-2xl sm:text-4xl leading-snug mb-4">{loc(s.title, lang)}</h3>
+        {s.bullets.length > 0 && (
+          <ul className={'space-y-2 sm:space-y-3 text-sm sm:text-lg ' + (dark ? 'text-white/85' : 'text-muted')}>
+            {s.bullets.map((b, j) => (
+              <li key={j} className="flex gap-3">
+                <span className="text-primary shrink-0">•</span>
+                <span>{loc(b, lang)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function renderSlides(item, lang) {
   return (
     <>

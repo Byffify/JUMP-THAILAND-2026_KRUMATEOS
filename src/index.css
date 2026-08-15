@@ -96,6 +96,7 @@ select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csv
 #dash-search { padding-left: 2.75rem; padding-right: 7rem; padding-top: .875rem; padding-bottom: .875rem; }
 #lib-search { padding-left: 2.75rem; }
 #support-search { padding-left: 2.75rem; }
+#tpl-search { padding-left: 2.75rem; }
 
 /* ---------- Prompt preview (template mode) ---------- */
 .prompt-preview-label {

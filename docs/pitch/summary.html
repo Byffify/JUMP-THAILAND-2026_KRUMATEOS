@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>KruMate OS — สรุปโดยละเอียด</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Leelawadee UI", "Segoe UI", Tahoma, sans-serif;
+    color: #2F0F03;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 11.5px;
+    line-height: 1.55;
+  }
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 16mm 18mm;
+    position: relative;
+    page-break-after: always;
+    background: #FFFDF9;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* Cover */
+  .cover {
+    display: flex; flex-direction: column; justify-content: center;
+    background:
+      radial-gradient(circle at 85% 10%, rgba(255,221,172,.55) 0, rgba(255,221,172,0) 40%),
+      radial-gradient(circle at 10% 92%, rgba(250,170,72,.28) 0, rgba(250,170,72,0) 42%),
+      #FFFDF9;
+  }
+  .cover .logo { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+  .cover .logo .dot { width: 13px; height: 13px; border-radius: 4px; background: #FAAA48; }
+  .cover h1 { font-size: 38px; line-height: 1.2; margin-top: 14px; font-weight: 800; }
+  .cover .sub { font-size: 16px; color: #6E4A33; margin-top: 12px; }
+  .cover .tag {
+    display: inline-block; margin-top: 22px; background: #FFDDAC; color: #2F0F03;
+    font-weight: 700; padding: 10px 20px; border-radius: 99px; font-size: 13px;
+  }
+  .cover .meta {
+    margin-top: 34px; border-top: 1px solid #F2E9DE; padding-top: 14px;
+    display: flex; justify-content: space-between; font-size: 12px; color: #6E4A33;
+  }
+
+  /* Sections */
+  .sec-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 17px; font-weight: 800; color: #2F0F03;
+    margin: 20px 0 10px;
+  }
+  .sec-title:first-child { margin-top: 0; }
+  .sec-title .no {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px;
+    background: #FAAA48; color: #2F0F03;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+  }
+  h3 { font-size: 13px; font-weight: 700; margin: 10px 0 4px; }
+  p { margin-bottom: 6px; }
+  ul, ol { margin: 4px 0 8px 18px; }
+  li { margin-bottom: 3px; }
+  b { color: #2F0F03; }
+  .accent { color: #B0762E; font-weight: 700; }
+
+  .card {
+    background: #fff; border: 1px solid #F2E9DE; border-radius: 10px;
+    padding: 12px 14px; margin: 8px 0; box-shadow: 0 2px 8px rgba(47,15,3,.04);
+  }
+  .card.hl { background: #FFF6EA; border-color: #FFDDAC; }
+  .quote {
+    border-left: 3px solid #FAAA48; padding: 8px 12px;
+    background: #FFF6EA; border-radius: 0 8px 8px 0; margin: 8px 0;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  th, td { border: 1px solid #F2E9DE; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #FFDDAC; color: #2F0F03; font-weight: 700; font-size: 11px; }
+  td { background: #fff; font-size: 10.5px; }
+  tr:nth-child(even) td { background: #FFFDF9; }
+
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; background: #FFDDAC; font-weight: 700; font-size: 10px; margin: 2px 3px 2px 0; }
+  .pill.dark { background: #2F0F03; color: #FFDDAC; }
+
+  .stats { display: flex; gap: 10px; margin: 8px 0; }
+  .stat { flex: 1; background: #2F0F03; color: #FFFDF9; border-radius: 10px; padding: 10px 12px; }
+  .stat .v { font-size: 18px; font-weight: 800; color: #FAAA48; }
+  .stat .l { font-size: 10.5px; color: #FFDDAC; }
+
+  .footer { margin-top: 18px; border-top: 1px solid #F2E9DE; padding-top: 8px; font-size: 10px; color: #B9A58F; }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<section class="page cover">
+  <div class="logo"><span class="dot"></span> KruMate OS</div>
+  <h1>สรุปโดยละเอียด<br>สำหรับจัดทำ Pitch Deck</h1>
+  <div class="sub">AI Teaching Studio — ให้เวลาคืนครูไทย</div>
+  <div class="tag">We Don't Replace Teachers. We Give Their Time Back.</div>
+  <div class="meta">
+    <span>15 ส.ค. 2026</span>
+    <span>จาก requirement.md · RELEASE_NOTES.md · โค้ด src/ · ประวัติ commit</span>
+  </div>
+</section>
+
+<!-- ===== 1-3 ===== -->
+<section class="page">
+  <div class="sec-title"><span class="no">1</span> KruMate OS คืออะไร</div>
+  <p><b>KruMate OS คือ AI Teaching Studio สำหรับครูไทย</b> — แพลตฟอร์มที่ให้ครูพิมพ์ Prompt (คำสั่ง) สั้นๆ หนึ่งบรรทัด แล้ว AI จะสร้างสื่อการสอนสำเร็จรูปให้ในชั่วโมงทำงาน ไม่ใช่ระบบ LMS, ERP, หรือระบบบริหารนักเรียน</p>
+  <div class="quote">ปรัชญาหลัก: <b>We Don't Replace Teachers. We Give Their Time Back.</b><br>เราไม่ได้มาแทนครู เราเอาเวลากลับคืนให้ครู</div>
+  <div class="stats">
+    <div class="stat"><div class="v">2–3 ชม. → 5–10 นาที</div><div class="l">เวลาทำสื่อต่อบทเรียน</div></div>
+    <div class="stat"><div class="v">50–70%</div><div class="l">ลดเวลาเตรียมการสอน</div></div>
+    <div class="stat"><div class="v">5–7 ชม.</div><div class="l">คืนเวลาครู / สัปดาห์</div></div>
+  </div>
+
+  <div class="sec-title"><span class="no">2</span> ปัญหาที่แก้ (Problem)</div>
+  <p>ครูไทยใช้เวลากับงานเตรียมสื่อทุกวัน: แผนการสอน · ใบงาน · แบบทดสอบ · สไลด์ · เกณฑ์การประเมิน · กิจกรรม เวลาที่หายไปเหล่านี้ถูกขโมยจากสิ่งที่สำคัญกว่า — การตั้งใจสอน การดูแลนักเรียน การออกแบบกิจกรรม เราเน้นแก้ "เวลาเตรียมสื่อ" ไม่ใช่สร้างระบบบริหารอีกตัว</p>
+
+  <div class="sec-title"><span class="no">3</span> วิธีใช้ / หน้าในแอป (ตัวจริงตอนนี้)</div>
+  <p>App เป็น SPA สมัยใหม่ (React) ประกอบด้วยหน้าหลัก 6 หน้า + ระบบสนับสนุน:</p>
+  <table>
+    <tr><th style="width:15%">หน้า</th><th style="width:22%">บทบาท</th><th>รายละเอียดฟีเจอร์</th></tr>
+    <tr><td><b>Dashboard</b></td><td>หน้าหลัก</td><td>กล่อง Prompt ใหญ่สำหรับค้นหา + Quick Create (6 ประเภท) + สถิติเวลาที่ประหยัด + Recent + AI Suggestions (5 ข้อ อัปเดตตามภาษา)</td></tr>
+    <tr><td><b>Generator</b></td><td>เครื่องมือสร้าง</td><td>พิมพ์ Prompt → เลือกระดับชั้น 13 ระดับ (อนุบาล/ป.1–ป.6/ม.1–ม.6) → วิชา 12 วิชา → ประเภท 1 อย่าง (6 ประเภท) → Generate</td></tr>
+    <tr><td><b>Content View</b></td><td>หน้าดูเนื้อหา</td><td>พรีวิวเต็มจอ สถานะบันทึก/ยังไม่บันทึก + คัดลอก/พิมพ์/ดาวน์โหลด/บันทึกเป็นรูปภาพ</td></tr>
+    <tr><td><b>Library</b></td><td>คลังเนื้อหา</td><td>ค้นหา (ชื่อ/วิชา/Prompt) + กรองหมวดหมู่/วิชา + ลบ + เปิดดู (ข้อมูลจาก localStorage)</td></tr>
+    <tr><td><b>AI Assistant</b></td><td>ผู้ช่วยแชท</td><td>แชทถามไอเดียบทเรียน ใบงาน ข้อสอบ วิธีจัดโครงสร้างชั้นเรียน (ไม่บันทึกประวัติ)</td></tr>
+    <tr><td><b>Support Center</b></td><td>ศูนย์ช่วยเหลือ</td><td>คู่มือครู + FAQ พร้อมช่องค้นหา · บทความแต่ละอันเป็นหน้าแยก /support/guide/:id</td></tr>
+  </table>
+  <div class="card"><b>เส้นทางผู้ใช้มาตรฐาน:</b> Dashboard → พิมพ์ Prompt → เลือกประเภท/ระดับ/วิชา → Generate → Preview → บันทึก/ส่งออก</div>
+  <div class="footer">KruMate OS · สรุปโดยละเอียด (1/3)</div>
+</section>
+
+<!-- ===== 4 ===== -->
+<section class="page">
+  <div class="sec-title"><span class="no">4</span> ฟีเจอร์หลักโดยละเอียด</div>
+
+  <h3>4.1 การสร้างเนื้อหา (Generator)</h3>
+  <ul>
+    <li><b>6 ประเภทผลงาน:</b> แผนการสอน · ใบงาน · แบบทดสอบ · สไลด์ · เกณฑ์การประเมิน · กิจกรรมในชั้นเรียน</li>
+    <li><b>เลือกได้ทีละ 1 ประเภท</b> (radio-style) + ระดับชั้น 13 ระดับ + วิชา 12 วิชา</li>
+    <li><b>2 โหมดการสร้าง:</b>
+      <ul>
+        <li><b>โหมดอิสระ:</b> พิมพ์ Prompt อะไรก็ได้</li>
+        <li><b>โหมดเทมเพลต:</b> กรอกฟอร์ม (หัวข้อ ระยะเวลา/คาบ จุดประสงค์ หมายเหตุ) → ระบบประกอบ Prompt ให้อัตโนมัติ แก้ไขต่อได้ มี preview</li>
+      </ul>
+    </li>
+    <li><b>ตั้งค่าข้อสอบ:</b> จำนวนข้อ 5–30 ข้อ · ประเภทคำถาม ปรนัย/ถูก-ผิด/ข้อเขียนสั้น</li>
+  </ul>
+
+  <h3>4.2 การค้นหา (Dashboard + Library)</h3>
+  <p>ค้นหาในคลังด้วยชื่อเรื่อง/วิชา/Prompt · ประวัติการค้นหา 10 รายการล่าสุด + ล้างทั้งหมด · Quick Create ไปหน้า Generator พร้อมประเภทที่เลือก</p>
+
+  <h3>4.3 การส่งออก (Export)</h3>
+  <ul>
+    <li><b>คัดลอก</b> ลงคลิปบอร์ด</li>
+    <li><b>พิมพ์</b> (print-friendly layout)</li>
+    <li><b>ดาวน์โหลด</b> เป็นไฟล์ข้อความ</li>
+    <li><b>บันทึกเป็นรูปภาพ PNG</b> — ผ่าน html2canvas ใช้แชร์ได้</li>
+  </ul>
+
+  <h3>4.4 ระบบ AI</h3>
+  <ul>
+    <li><b>Gemini API</b> ผ่าน Serverless Proxy (Vercel Function) — Key เก็บฝั่งเซิร์ฟเวอร์เท่านั้น ไม่รั่วลง client bundle</li>
+    <li><b>Fallback เป็น Mock Data อัตโนมัติ</b> เมื่อ Gemini ไม่พร้อม — การเดโมไม่สะดุด</li>
+    <li>interface เดียว (<code>API.*</code>) สำหรับ generate / suggestions / assistant</li>
+  </ul>
+
+  <h3>4.5 ระบบข้อมูล (Local First)</h3>
+  <p><b>localStorage</b> เก็บ: คลังเนื้อหา, metrics, ข้อมูลผู้ใช้, ประวัติค้นหา · <b>Live store</b> (หน่วยความจำ session) สำหรับเนื้อหาที่ยังไม่ได้บันทึก · ไม่ต้องมี backend สำหรับเดโม/ใช้งานส่วนตัว</p>
+
+  <h3>4.6 ภาษา & 4.7 ระบบสนับสนุน</h3>
+  <ul>
+    <li><b>ไทย/อังกฤษ</b> ครบทุกหน้า ปุ่มสลับภาษามุมขวาบน (i18n กลางเดียว)</li>
+    <li><b>Support Center:</b> Tab คู่มือครู + FAQ · หมวด guide: เริ่มต้น/ประเภทผลงาน/คลัง&ส่งออก/ผู้ช่วย&เทมเพลต · แต่ละหมวดเป็น card หัวข้อเป็นลิงก์→หน้าแยก · FAQ 6 คำถาม 2 ภาษา · ช่องค้นหากรองทันที</li>
+  </ul>
+
+  <h3>4.8 เทคโนโลยี / สถาปัตยกรรม</h3>
+  <div>
+    <span class="pill dark">React 18 + Vite 5</span><span class="pill">Tailwind CSS 3</span><span class="pill dark">react-router-dom 6 (HashRouter)</span><span class="pill">Gemini API</span><span class="pill dark">html2canvas</span><span class="pill">Vercel Serverless Proxy</span>
+  </div>
+  <p style="margin-top:6px;"><b>โครงสร้างโค้ด:</b> <code>pages/</code> หน้าแต่ละหน้า · <code>components/</code> UI · <code>context/</code> I18n/Toast/Modal/App · <code>services/</code> api, geminiService, store, i18n · <code>data/</code> types, generator (mock), support</p>
+  <p><b>Design system:</b> Romantic orange <span class="accent">#FAAA48</span> · Peach glow <span class="accent">#FFDDAC</span> · Chocolatemelange <span class="accent">#2F0F03</span> · cream #FFFDF9 — แรงบันดาลใจจาก Fastwork (สะอาด, responsive, minimal, เร็ว)</p>
+
+  <div class="footer">KruMate OS · สรุปโดยละเอียด (2/3)</div>
+</section>
+
+<!-- ===== 5-9 ===== -->
+<section class="page">
+  <div class="sec-title"><span class="no">5</span> ตัวชี้วัดความสำเร็จ (KPI)</div>
+  <ul>
+    <li><b>Primary KPI: Hours Saved Per Teacher</b> — ชั่วโมงที่ประหยัดได้ต่อครู</li>
+    <li>Materials Generated — จำนวนสื่อที่สร้าง</li>
+    <li>Hours Saved — ชั่วโมงที่คืนให้ครู (คำนวณ ~0.75 ชม./สื่อ)</li>
+    <li>Weekly Active Teachers · Generation Success Rate (มั่นคงด้วย mock fallback)</li>
+  </ul>
+
+  <div class="sec-title"><span class="no">6</span> เส้นทางไอเดียตั้งแต่ต้น (Journey)</div>
+  <ol>
+    <li><b>นิยามโจทย์</b> (requirement.md) — AI Content สร้าง 6 ประเภท ลดเวลา 2–3 ชม. → 5–10 นาที ไม่ใช่ LMS/ERP วัดด้วย "เวลาที่คืนให้ครู"</li>
+    <li><b>ตั้งฐานสถาปัตยกรรม</b> — Vanilla JS SPA → React 18 + Vite + Tailwind ครบทุกหน้า (parity ตรวจเทียบหน้าตา/ฟีเจอร์)</li>
+    <li><b>เชื่อม AI จริง</b> — Lesson + Quiz Generation ด้วย Gemini API + prompt แยกตามประเภท</li>
+    <li><b>สเกลตัวเลือก</b> — ระดับชั้น 13 ระดับ + วิชา 12 วิชา + single-type</li>
+    <li><b>คุณค่าครบวงจร</b> — export (copy/print/download/รูปภาพ) + สร้างภาพได้ + Content View เฉพาะ</li>
+    <li><b>ปรับประสบการณ์</b> — โหมดเทมเพลต + UI/i18n สองภาษา + โลโก้ KruMate</li>
+    <li><b>ความปลอดภัย</b> — Gemini หลัง Serverless Proxy กัน key รั่ว</li>
+    <li><b>ปิดท้ายด้วย Trust</b> — Support Center (คู่มือครู + FAQ) → ปรับนำทางเข้า navbar</li>
+  </ol>
+  <div class="quote">ไอเดียใหญ่ตลอดมา: "ทำอะไรทีละชั้น แล้วค่อยๆ เพิ่มคุณค่า" — ถามเสมอว่า <i>ครูได้อะไร?</i> และ <i>ปลอดภัยไหม?</i></div>
+
+  <div class="sec-title"><span class="no">7</span> Roadmap / แนวทางต่อยอด</div>
+  <ul>
+    <li><b>ใกล้:</b> ล็อกอินจริง (Auth Gate จำลอง → OAuth/SSO) · สร้างหลายประเภทจาก 1 Prompt (bundle) · Export .docx/.pptx</li>
+    <li><b>กลาง:</b> Cloud Sync + แชร์สื่อ · รองรับหลักสูตร/ตัวชี้วัด (สพฐ.) · Admin Dashboard + รายงาน · แพ็กเกจรายโรงเรียน/เขต</li>
+    <li><b>ไกล:</b> Template Marketplace · Offline Mode · โมเดลภาษาไทยเฉพาะทาง (fine-tune)</li>
+  </ul>
+
+  <div class="sec-title"><span class="no">8</span> สิ่งที่ทำให้เราต่าง</div>
+  <ul>
+    <li><b>เจาะจงคนไทย:</b> ระดับชั้น 13 ระดับ วิชาตรงหลักสูตร ไทย/อังกฤษ ตั้งแต่แรก</li>
+    <li><b>เรียบง่ายสุด:</b> 1 Prompt → สื่อ 6 ประเภท → บันทึก/ส่งออก ทางเดียวจบ</li>
+    <li><b>Local-first:</b> ไม่ต้องตั้ง server ข้อมูลอยู่กับครู</li>
+    <li><b>ปลอดภัยโดยดีไซน์:</b> ไม่เก็บ key ในเว็บ + fallback กันเดโมพัง</li>
+    <li><b>แคร์ครู:</b> สถิติเน้น "เวลาที่คืนให้ครู" + คู่มือช่วยเหลือครบ</li>
+  </ul>
+
+  <div class="card hl">
+    <b>One-liner:</b> KruMate OS เป็น AI Teaching Studio ที่ช่วยครูไทยสร้างแผนการสอน ใบงาน แบบทดสอบ และสื่อการสอนจากคำสั่งสั้นๆ เพียงบรรทัดเดียว ลดเวลาการเตรียมเนื้อหา และให้ครูมุ่งเน้นที่การสอนแทนการสร้างเนื้อหา
+  </div>
+  <div class="footer">KruMate OS · สรุปโดยละเอียด (3/3)</div>
+</section>
+
+</body>
+</html>

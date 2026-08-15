@@ -294,6 +294,8 @@ export default function GeneratorPage() {
           )}
         </button>
       </div>
+
+      <p className="text-xs text-muted mt-6 border-t border-line pt-4 text-center">{t('gen.disclaimer')}</p>
     </section>
   );
 }

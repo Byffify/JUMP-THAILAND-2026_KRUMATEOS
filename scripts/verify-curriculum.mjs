@@ -5,7 +5,7 @@ import assert from 'node:assert';
 const GRADES = LEVELS.filter(l => l.value !== 'k').map(l => l.value);
 const SUBJECT_VALUES = SUBJECTS.map(s => s.value);
 
-assert.ok(TEMPLATES.length >= 132, 'expected at least 132 templates, got ' + TEMPLATES.length); // raised in a later task (144)
+assert.ok(TEMPLATES.length >= 144, 'expected at least 144 templates, got ' + TEMPLATES.length);
 
 for (const t of TEMPLATES) {
   assert.strictEqual(t.type, 'slides', t.id + ' must be slides');

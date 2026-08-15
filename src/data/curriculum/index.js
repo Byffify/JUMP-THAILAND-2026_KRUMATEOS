@@ -9,6 +9,7 @@ import { BIOLOGY } from './Biology.js';
 import { HISTORY } from './History.js';
 import { GEOGRAPHY } from './Geography.js';
 import { COMPUTING } from './Computing.js';
+import { OTHER } from './Other.js';
 
 export const TEMPLATES = [
   ...MATH,
@@ -21,7 +22,8 @@ export const TEMPLATES = [
   ...BIOLOGY,
   ...HISTORY,
   ...GEOGRAPHY,
-  ...COMPUTING
+  ...COMPUTING,
+  ...OTHER
 ];
 
 export function findTemplateById(id) {

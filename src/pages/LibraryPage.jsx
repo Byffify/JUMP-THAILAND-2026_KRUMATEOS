@@ -214,8 +214,9 @@ export default function LibraryPage() {
             <div className="relative flex-1">
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted">⌕</span>
               <input
+                id="tpl-search"
                 type="search"
-                className="input pl-9"
+                className="input"
                 placeholder={t('lib.templateSearchPh')}
                 value={tplQ}
                 onChange={e => setTplQ(e.target.value)}

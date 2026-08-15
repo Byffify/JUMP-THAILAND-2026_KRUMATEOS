@@ -4,6 +4,13 @@
    styles and interpolations preserved verbatim.
    ========================================================================== */
 
+export function loc(v, lang) {
+  if (v && typeof v === 'object' && !Array.isArray(v)) {
+    return v[lang] || v.en || v.th || '';
+  }
+  return v == null ? '' : v;
+}
+
 export function renderLesson(item) {
   return (
     <div className="card p-6">
@@ -192,13 +199,13 @@ export function renderActivity(item) {
   );
 }
 
-export function renderSlides(item) {
+export function renderSlides(item, lang) {
   return (
     <>
       <div className="card p-6">
-        <h2 className="font-semibold text-lg mb-1">{item.title}</h2>
+        <h2 className="font-semibold text-lg mb-1">{loc(item.title, lang)}</h2>
         <p className="text-sm text-muted mb-5">
-          {item.grade || ''} · {item.subject || ''} · {item.slides.length} slides
+          {loc(item.grade, lang) || ''} · {item.subject || ''} · {item.slides.length} slides
         </p>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
@@ -212,14 +219,14 @@ export function renderSlides(item) {
             </div>
             <div>
               {s.subtitle && (
-                <p className="text-xs mb-2 text-primary">{s.subtitle}</p>
+                <p className="text-xs mb-2 text-primary">{loc(s.subtitle, lang)}</p>
               )}
-              <h3 className="font-semibold text-xl leading-snug mb-3">{s.title}</h3>
+              <h3 className="font-semibold text-xl leading-snug mb-3">{loc(s.title, lang)}</h3>
               {s.bullets.length > 0 && (
                 <ul className="space-y-1.5 text-sm opacity-90">
                   {s.bullets.map((b, j) => (
                     <li key={j} className="flex gap-2">
-                      <span className="text-primary">•</span> {b}
+                      <span className="text-primary">•</span> {loc(b, lang)}
                     </li>
                   ))}
                 </ul>
@@ -232,13 +239,13 @@ export function renderSlides(item) {
   );
 }
 
-export function renderItemBody(item) {
+export function renderItemBody(item, lang) {
   switch (item.type) {
     case 'lesson': return renderLesson(item);
     case 'worksheet': return renderWorksheet(item);
     case 'quiz': return renderQuiz(item);
     case 'rubric': return renderRubric(item);
     case 'activity': return renderActivity(item);
-    default: return renderSlides(item);
+    default: return renderSlides(item, lang);
   }
 }

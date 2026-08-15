@@ -14,7 +14,7 @@ import { copyItem, downloadItem, printItem, exportAsImage } from '../utils/expor
 
 export default function ContentViewPage() {
   const { id } = useParams();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const toast = useToast();
 
   const [item, setItem] = useState(() => STORE.find(id));
@@ -82,7 +82,7 @@ export default function ContentViewPage() {
             </button>
           </div>
         </div>
-        <div id="content-body" ref={contentBodyRef} className="space-y-6">{renderItemBody(item)}</div>
+        <div id="content-body" ref={contentBodyRef} className="space-y-6">{renderItemBody(item, lang)}</div>
       </div>
     </section>
   );

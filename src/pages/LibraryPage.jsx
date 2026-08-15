@@ -7,7 +7,11 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { STORE } from '../services/store.js';
 import { assetFor, labelFor, SUBJECTS } from '../data/types.js';
+import { LEVELS } from '../data/types.js';
+import { TEMPLATES } from '../data/curriculum/index.js';
 import { fmtDate } from '../utils/format.js';
+import { levelLabel } from '../data/types.js';
+import { loc } from '../components/ItemRenderers.jsx';
 import { useI18n } from '../context/I18nContext.jsx';
 import { useApp } from '../context/AppContext.jsx';
 import { useModal } from '../context/ModalContext.jsx';
@@ -25,7 +29,7 @@ function chipColor(t) {
 }
 
 export default function LibraryPage() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { libQuery, setLibQuery } = useApp();
   const openModal = useModal();
   const toast = useToast();
@@ -36,6 +40,20 @@ export default function LibraryPage() {
   const [subj, setSubj] = useState('');
   const [type, setType] = useState('all');
   const [, setTick] = useState(0);
+
+  const [tab, setTab] = useState('mine');
+  const [tplQ, setTplQ] = useState('');
+  const [tplSubj, setTplSubj] = useState('');
+  const [tplGrade, setTplGrade] = useState('');
+
+  const tplFiltered = TEMPLATES.filter(t => {
+    const q = tplQ.trim().toLowerCase();
+    const hay = [t.topic.th, t.topic.en, t.subject, ...(t.indicators || [])].join(' ').toLowerCase();
+    if (q && !hay.includes(q)) return false;
+    if (tplSubj && t.subject !== tplSubj) return false;
+    if (tplGrade && t.grade !== tplGrade) return false;
+    return true;
+  });
 
   useEffect(() => {
     if (libQuery !== undefined) {
@@ -81,6 +99,27 @@ export default function LibraryPage() {
         <Link to="/generator" className="btn btn-primary">{t('lib.new')}</Link>
       </div>
 
+      <div className="flex gap-2 mb-6" role="tablist">
+        <button
+          role="tab"
+          aria-selected={tab === 'mine'}
+          className={'chip ' + (tab === 'mine' ? 'chip-active' : '')}
+          onClick={() => setTab('mine')}
+        >
+          {t('lib.tabMine')}
+        </button>
+        <button
+          role="tab"
+          aria-selected={tab === 'templates'}
+          className={'chip ' + (tab === 'templates' ? 'chip-active' : '')}
+          onClick={() => setTab('templates')}
+        >
+          {t('lib.tabTemplates')}
+        </button>
+      </div>
+
+      {tab === 'mine' && (
+        <>
       <div className="rounded-2xl bg-white border border-line shadow-card p-4 mb-6 flex flex-col md:flex-row gap-3 md:items-center">
         <div className="relative flex-1">
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted">⌕</span>
@@ -165,6 +204,71 @@ export default function LibraryPage() {
         <p className="font-medium">{t('lib.emptyTitle')}</p>
         <p className="text-muted text-sm mt-1">{t('lib.emptySub')}</p>
       </div>
+        </>
+      )}
+
+      {tab === 'templates' && (
+        <div>
+          <p className="text-xs text-muted mb-3">{t('lib.templateDisclaimer')}</p>
+          <div className="rounded-2xl bg-white border border-line shadow-card p-4 mb-6 flex flex-col md:flex-row gap-3 md:items-center">
+            <div className="relative flex-1">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted">⌕</span>
+              <input
+                type="search"
+                className="input pl-9"
+                placeholder={t('lib.templateSearchPh')}
+                value={tplQ}
+                onChange={e => setTplQ(e.target.value)}
+              />
+            </div>
+            <select className="input md:w-52" value={tplSubj} onChange={e => setTplSubj(e.target.value)}>
+              <option value="">{t('lib.allSub')}</option>
+              {SUBJECTS.map(s => (
+                <option key={s.value} value={s.value}>{t(s.key)}</option>
+              ))}
+            </select>
+            <select className="input md:w-52" value={tplGrade} onChange={e => setTplGrade(e.target.value)}>
+              <option value="">{t('lib.templateAllGrade')}</option>
+              {LEVELS.filter(l => l.value !== 'k').map(l => (
+                <option key={l.value} value={l.value}>{levelLabel(l.value, lang)}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {tplFiltered.map(tp => (
+              <div key={tp.id} className="card card-hover overflow-hidden flex flex-col">
+                <button
+                  className="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  onClick={() => navigate('/content/' + tp.id)}
+                >
+                  <img src={assetFor('slides')} alt="" className="w-full aspect-[4/3] object-contain p-2 border-b border-line bg-soft/40" />
+                </button>
+                <div className="p-4 flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className={'inline-block text-[11px] px-2 py-0.5 rounded-full ' + chipColor('slides')}>{t('lib.templateBadge')}</span>
+                  </div>
+                  <p className="font-semibold leading-snug mb-1">{loc(tp.topic, lang)}</p>
+                  <p className="text-xs text-muted">{levelLabel(tp.grade, lang)} · {t(SUBJECTS.find(s => s.value === tp.subject)?.key || tp.subject)}</p>
+                  {tp.indicators.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {tp.indicators.map((ind, i) => (
+                        <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-soft text-muted max-w-full truncate" title={ind}>{ind}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="px-4 pb-4">
+                  <button className="btn btn-secondary w-full text-sm" onClick={() => navigate('/content/' + tp.id)}>{t('lib.open')}</button>
+                </div>
+              </div>
+            ))}
+            {tplFiltered.length === 0 && (
+              <div className="col-span-full text-center py-8 text-muted text-sm">{t('lib.templateNoResults')}</div>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

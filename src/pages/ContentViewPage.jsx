@@ -35,12 +35,18 @@ export default function ContentViewPage() {
   }
 
   const onSave = () => {
+    if (item.isTemplate) {
+      STORE.cloneTemplate(item);
+      toast(t('content.toastSavedTemplate'), 'ok');
+      setTick(n => n + 1);
+      return;
+    }
     STORE.save(item);
     toast(t('content.toastSaved'), 'ok');
     setTick(n => n + 1);
   };
 
-  const isSaved = !!STORE.itemById(item.id);
+  const isSaved = !!STORE.itemById(item.id) && !item.isTemplate;
 
   return (
     <section id="page-content" className="page">
@@ -66,7 +72,7 @@ export default function ContentViewPage() {
               className={'btn btn-primary' + (isSaved ? ' opacity-70' : '')}
               onClick={onSave}
             >
-              {isSaved ? t('content.savedBadge') : t('content.save')}
+              {item.isTemplate ? t('content.saveToLibrary') : (isSaved ? t('content.savedBadge') : t('content.save'))}
             </button>
             <button id="content-copy" className="btn btn-secondary" onClick={() => copyItem(item, toast)}>
               {t('content.copy')}

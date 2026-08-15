@@ -1,3 +1,5 @@
+import { findTemplateById } from '../data/curriculum/index.js';
+
 /* ==========================================================================
    KruMate OS — Store (localStorage: library, prefs, metrics)
    ========================================================================== */
@@ -22,8 +24,12 @@ export const STORE = {
   find(id) {
     const lib = this.getLibrary();
     const item = lib.find(i => i.id === id);
-    // also check live (unsaved) items
-    return item || Live.get(id) || null;
+    if (item) return item;
+    const live = Live.get(id);
+    if (live) return live;
+    const tpl = findTemplateById(id);
+    if (tpl) return Object.assign({}, tpl, { isTemplate: true });
+    return null;
   },
 
   itemById(id) { return this.getLibrary().find(i => i.id === id) || null; },
@@ -39,6 +45,16 @@ export const STORE = {
     write(LS_LIB, lib);
     this.bumpMetric('materials', lib.length);
     return item;
+  },
+
+  cloneTemplate(template) {
+    const copy = Object.assign({}, template, {
+      id: crypto.randomUUID ? crypto.randomUUID() : 'tpl-' + Date.now() + '-' + Math.random().toString(36).slice(2),
+      isTemplate: false,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+    return this.save(copy);
   },
 
   delete(id) {
